@@ -1,9 +1,6 @@
 #ifndef _LINUX_STAT_H
 #define _LINUX_STAT_H
 
-
-#if defined(__KERNEL__) || !defined(__GLIBC__) || (__GLIBC__ < 2)
-
 #define S_IFMT  00170000
 #define S_IFSOCK 0140000
 #define S_IFLNK	 0120000
@@ -38,8 +35,5 @@
 #define S_IROTH 00004
 #define S_IWOTH 00002
 #define S_IXOTH 00001
-
-#endif
-
 
 #endif
