@@ -7,38 +7,25 @@
 #ifndef _ASM_POWERPC_MMAN_H
 #define _ASM_POWERPC_MMAN_H
 
-#include <uapi/asm/mman.h>
+#include <asm-generic/mman-common.h>
 
-#ifdef CONFIG_PPC64
 
-#include <asm/cputable.h>
-#include <linux/mm.h>
+#define PROT_SAO	0x10		/* Strong Access Ordering */
 
-/*
- * This file is included by linux/mman.h, so we can't use cacl_vm_prot_bits()
- * here.  How important is the optimization?
- */
-static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot)
-{
-	return (prot & PROT_SAO) ? VM_SAO : 0;
-}
-#define arch_calc_vm_prot_bits(prot) arch_calc_vm_prot_bits(prot)
+#define MAP_RENAME      MAP_ANONYMOUS   /* In SunOS terminology */
+#define MAP_NORESERVE   0x40            /* don't reserve swap pages */
+#define MAP_LOCKED	0x80
 
-static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
-{
-	return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
-}
-#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
+#define MAP_GROWSDOWN	0x0100		/* stack-like segment */
+#define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
 
-static inline int arch_validate_prot(unsigned long prot)
-{
-	if (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | PROT_SAO))
-		return 0;
-	if ((prot & PROT_SAO) && !cpu_has_feature(CPU_FTR_SAO))
-		return 0;
-	return 1;
-}
-#define arch_validate_prot(prot) arch_validate_prot(prot)
+#define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
+#define MCL_FUTURE      0x4000          /* lock all additions to address space */
 
-#endif /* CONFIG_PPC64 */
-#endif	/* _ASM_POWERPC_MMAN_H */
+#define MAP_POPULATE	0x8000		/* populate (prefault) pagetables */
+#define MAP_NONBLOCK	0x10000		/* do not block on IO */
+#define MAP_STACK	0x20000		/* give out an address that is best suited for process/thread stacks */
+#define MAP_HUGETLB	0x40000		/* create a huge page mapping */
+
+#endif /* _ASM_POWERPC_MMAN_H */

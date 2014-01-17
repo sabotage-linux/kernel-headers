@@ -3,10 +3,10 @@
 
 #ifdef CONFIG_PPC64
 #define cond_syscall(x) \
-	asm ("\t.weak " #x "\n\t.set " #x ", sys_ni_syscall\n"		\
+	__asm__ ("\t.weak " #x "\n\t.set " #x ", sys_ni_syscall\n"		\
 	     "\t.weak ." #x "\n\t.set ." #x ", .sys_ni_syscall\n")
 #define SYSCALL_ALIAS(alias, name)					\
-	asm ("\t.globl " #alias "\n\t.set " #alias ", " #name "\n"	\
+	__asm__ ("\t.globl " #alias "\n\t.set " #alias ", " #name "\n"	\
 	     "\t.globl ." #alias "\n\t.set ." #alias ", ." #name)
 #endif
 
