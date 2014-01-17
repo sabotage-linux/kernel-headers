@@ -11,10 +11,7 @@ for arch in arm powerpc mips x86
 do
   git rm -r $arch/include/*
   mkdir -p $arch/include
-  for dir in asm-generic drm linux rdma scsi sound video xen uapi
-  do
-    cp -a $1/include/$dir $arch/include/
-  done
+  cp -a $1/include/uapi/* $arch/include/
   cp -a $1/arch/$arch/include/uapi/asm $arch/include/
   git add $arch/include
 done
