@@ -26,7 +26,7 @@ find generic -name '..install.cmd' | xargs rm
 find generic -name '.install' | xargs rm
 git add generic/include/
 
-for arch in arm powerpc mips x86
+for arch in arm powerpc mips x86 microblaze
 do
   git rm -r $arch/include/*
   mkdir -p $arch/include
