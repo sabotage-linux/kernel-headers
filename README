@@ -5,7 +5,6 @@ our own copy for the archs supported by sabotage.
 additionally downloading the entire kernel tarball just to
 get the headers is overkill.
 
-this currently uses headers of kernel 3.3.4, which proved
-to be quite stable in the past. they will be updated to
-newer versions in irregular intervals.
+this currently uses headers of kernel 3.12.6, which is what
+Debian is now using. There is a previous 3.3.4 branch.
 
