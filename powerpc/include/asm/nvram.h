@@ -7,8 +7,8 @@
  * 2 of the License, or (at your option) any later version.
  */
 
-#ifndef _ASM_POWERPC_NVRAM_H
-#define _ASM_POWERPC_NVRAM_H
+#ifndef _UAPI_ASM_POWERPC_NVRAM_H
+#define _UAPI_ASM_POWERPC_NVRAM_H
 
 /* Signatures for nvram partitions */
 #define NVRAM_SIG_SP	0x02	/* support processor */
@@ -59,4 +59,4 @@ struct pmac_machine_location {
 #define IOC_NVRAM_GET_OFFSET	_IOWR('p', 0x42, int)	/* Get NVRAM partition offset */
 #define IOC_NVRAM_SYNC		_IO('p', 0x43)		/* Sync NVRAM image */
 
-#endif /* _ASM_POWERPC_NVRAM_H */
+#endif /* _UAPI_ASM_POWERPC_NVRAM_H */

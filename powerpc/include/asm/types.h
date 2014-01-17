@@ -1,5 +1,17 @@
-#ifndef _ASM_POWERPC_TYPES_H
-#define _ASM_POWERPC_TYPES_H
+/*
+ * This file is never included by application software unless
+ * explicitly requested (e.g., via linux/types.h) in which case the
+ * application is Linux specific so (user-) name space pollution is
+ * not a major issue.  However, for interoperability, libraries still
+ * need to be careful to avoid a name clashes.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version
+ * 2 of the License, or (at your option) any later version.
+ */
+#ifndef _UAPI_ASM_POWERPC_TYPES_H
+#define _UAPI_ASM_POWERPC_TYPES_H
 
 /*
  * This is here because we used to use l64 for 64bit powerpc
@@ -17,18 +29,6 @@
 
 #ifndef __ASSEMBLY__
 
-/*
- * This file is never included by application software unless
- * explicitly requested (e.g., via linux/types.h) in which case the
- * application is Linux specific so (user-) name space pollution is
- * not a major issue.  However, for interoperability, libraries still
- * need to be careful to avoid a name clashes.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or (at your option) any later version.
- */
 
 typedef struct {
 	__u32 u[4];
@@ -37,4 +37,4 @@ typedef struct {
 #endif /* __ASSEMBLY__ */
 
 
-#endif /* _ASM_POWERPC_TYPES_H */
+#endif /* _UAPI_ASM_POWERPC_TYPES_H */

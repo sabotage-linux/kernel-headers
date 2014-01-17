@@ -1,6 +1,3 @@
-#ifndef _ASM_POWERPC_TERMIOS_H
-#define _ASM_POWERPC_TERMIOS_H
-
 /*
  * Liberally adapted from alpha/termios.h.  In particular, the c_cc[]
  * fields have been reordered so that termio & termios share the
@@ -12,6 +9,9 @@
  * as published by the Free Software Foundation; either version
  * 2 of the License, or (at your option) any later version.
  */
+#ifndef _UAPI_ASM_POWERPC_TERMIOS_H
+#define _UAPI_ASM_POWERPC_TERMIOS_H
+
 
 #include <asm/ioctls.h>
 #include <asm/termbits.h>
@@ -73,4 +73,4 @@ struct termio {
 
 
 
-#endif	/* _ASM_POWERPC_TERMIOS_H */
+#endif /* _UAPI_ASM_POWERPC_TERMIOS_H */

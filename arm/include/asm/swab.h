@@ -12,10 +12,10 @@
  * and word accesses (data or instruction) appear as:
  *  d0...d31
  */
-#ifndef __ASM_ARM_SWAB_H
-#define __ASM_ARM_SWAB_H
+#ifndef _UAPI__ASM_ARM_SWAB_H
+#define _UAPI__ASM_ARM_SWAB_H
 
-
+#include <linux/compiler.h>
 #include <linux/types.h>
 
 #if !defined(__STRICT_ANSI__) || defined(__KERNEL__)
@@ -23,7 +23,8 @@
 #endif
 
 
-static __inline__  __u32 __arch_swab32(__u32 x)
+#if !defined(__KERNEL__) || __LINUX_ARM_ARCH__ < 6
+static inline __attribute_const__ __u32 __arch_swab32(__u32 x)
 {
 	__u32 t;
 
@@ -34,7 +35,7 @@ static __inline__  __u32 __arch_swab32(__u32 x)
 		 * right thing and not screw it up to different degrees
 		 * depending on the gcc version.
 		 */
-		__asm__ ("eor\t%0, %1, %1, ror #16" : "=r" (t) : "r" (x));
+		asm ("eor\t%0, %1, %1, ror #16" : "=r" (t) : "r" (x));
 	} else
 #endif
 		t = x ^ ((x << 16) | (x >> 16)); /* eor r1,r0,r0,ror #16 */
@@ -47,5 +48,6 @@ static __inline__  __u32 __arch_swab32(__u32 x)
 }
 #define __arch_swab32 __arch_swab32
 
-
 #endif
+
+#endif /* _UAPI__ASM_ARM_SWAB_H */

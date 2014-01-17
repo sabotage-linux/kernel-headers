@@ -1,7 +1,7 @@
-#ifndef _ASM_X86_PTRACE_H
-#define _ASM_X86_PTRACE_H
+#ifndef _UAPI_ASM_X86_PTRACE_H
+#define _UAPI_ASM_X86_PTRACE_H
 
-	/* For */
+#include <linux/compiler.h>	/* For __user */
 #include <asm/ptrace-abi.h>
 #include <asm/processor-flags.h>
 
@@ -12,6 +12,7 @@
 /* this struct defines the way the registers are stored on the
    stack during a system call. */
 
+#ifndef __KERNEL__
 
 struct pt_regs {
 	long ebx;
@@ -33,9 +34,11 @@ struct pt_regs {
 	int  xss;
 };
 
+#endif /* __KERNEL__ */
 
 #else /* __i386__ */
 
+#ifndef __KERNEL__
 
 struct pt_regs {
 	unsigned long r15;
@@ -65,10 +68,11 @@ struct pt_regs {
 /* top of stack page */
 };
 
+#endif /* __KERNEL__ */
 #endif /* !__i386__ */
 
 
 
 #endif /* !__ASSEMBLY__ */
 
-#endif /* _ASM_X86_PTRACE_H */
+#endif /* _UAPI_ASM_X86_PTRACE_H */

@@ -1,5 +1,5 @@
-#ifndef _ASM_X86_VSYSCALL_H
-#define _ASM_X86_VSYSCALL_H
+#ifndef _UAPI_ASM_X86_VSYSCALL_H
+#define _UAPI_ASM_X86_VSYSCALL_H
 
 enum vsyscall_num {
 	__NR_vgettimeofday,
@@ -14,4 +14,4 @@ enum vsyscall_num {
 #define VSYSCALL_ADDR(vsyscall_nr) (VSYSCALL_START+VSYSCALL_SIZE*(vsyscall_nr))
 
 
-#endif /* _ASM_X86_VSYSCALL_H */
+#endif /* _UAPI_ASM_X86_VSYSCALL_H */

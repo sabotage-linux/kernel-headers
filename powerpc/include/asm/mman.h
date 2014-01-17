@@ -1,14 +1,14 @@
-#ifndef _ASM_POWERPC_MMAN_H
-#define _ASM_POWERPC_MMAN_H
-
-#include <asm-generic/mman-common.h>
-
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version
  * 2 of the License, or (at your option) any later version.
  */
+#ifndef _UAPI_ASM_POWERPC_MMAN_H
+#define _UAPI_ASM_POWERPC_MMAN_H
+
+#include <asm-generic/mman-common.h>
+
 
 #define PROT_SAO	0x10		/* Strong Access Ordering */
 
@@ -28,4 +28,4 @@
 #define MAP_STACK	0x20000		/* give out an address that is best suited for process/thread stacks */
 #define MAP_HUGETLB	0x40000		/* create a huge page mapping */
 
-#endif	/* _ASM_POWERPC_MMAN_H */
+#endif /* _UAPI_ASM_POWERPC_MMAN_H */

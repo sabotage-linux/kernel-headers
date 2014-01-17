@@ -1,5 +1,5 @@
-#ifndef _ASM_X86_VM86_H
-#define _ASM_X86_VM86_H
+#ifndef _UAPI_ASM_X86_VM86_H
+#define _UAPI_ASM_X86_VM86_H
 
 /*
  * I'm guessing at the VIF/VIP flag usage, but hope that this is how
@@ -126,4 +126,4 @@ struct vm86plus_struct {
 };
 
 
-#endif /* _ASM_X86_VM86_H */
+#endif /* _UAPI_ASM_X86_VM86_H */

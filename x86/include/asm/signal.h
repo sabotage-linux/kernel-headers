@@ -1,20 +1,23 @@
-#ifndef _ASM_X86_SIGNAL_H
-#define _ASM_X86_SIGNAL_H
+#ifndef _UAPI_ASM_X86_SIGNAL_H
+#define _UAPI_ASM_X86_SIGNAL_H
 
 #ifndef __ASSEMBLY__
 #include <linux/types.h>
 #include <linux/time.h>
-
+#include <linux/compiler.h>
 
 /* Avoid too many header ordering problems.  */
 struct siginfo;
 
+#ifndef __KERNEL__
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 #define NSIG		32
 typedef unsigned long sigset_t;
 
+#endif /* __KERNEL__ */
 #endif /* __ASSEMBLY__ */
+
 
 #define SIGHUP		 1
 #define SIGINT		 2
@@ -84,12 +87,6 @@ typedef unsigned long sigset_t;
 
 #define SA_RESTORER	0x04000000
 
-/*
- * sigaltstack controls
- */
-#define SS_ONSTACK	1
-#define SS_DISABLE	2
-
 #define MINSIGSTKSZ	2048
 #define SIGSTKSZ	8192
 
@@ -98,8 +95,9 @@ typedef unsigned long sigset_t;
 #ifndef __ASSEMBLY__
 
 
-#ifdef __i386__
+# ifndef __KERNEL__
 /* Here we must cater to libcs that poke about in kernel headers.  */
+#ifdef __i386__
 
 struct sigaction {
 	union {
@@ -123,18 +121,15 @@ struct sigaction {
 	sigset_t sa_mask;		/* mask last for extensibility */
 };
 
-struct k_sigaction {
-	struct sigaction sa;
-};
-
 #endif /* !__i386__ */
+# endif /* ! __KERNEL__ */
 
 typedef struct sigaltstack {
-	void *ss_sp;
+	void __user *ss_sp;
 	int ss_flags;
 	size_t ss_size;
 } stack_t;
 
 #endif /* __ASSEMBLY__ */
 
-#endif /* _ASM_X86_SIGNAL_H */
+#endif /* _UAPI_ASM_X86_SIGNAL_H */

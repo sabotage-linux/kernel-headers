@@ -1,13 +1,10 @@
-#ifndef _ASM_POWERPC_PTRACE_H
-#define _ASM_POWERPC_PTRACE_H
-
 /*
  * Copyright (C) 2001 PPC64 Team, IBM Corp
  *
  * This struct defines the way the registers are stored on the
  * kernel stack during a system call or other kernel entry.
  *
- * this should only contain __volatile__ regs
+ * this should only contain volatile regs
  * since we can keep non-volatile in the thread_struct
  * should set this up when only volatiles are saved
  * by intr code.
@@ -23,6 +20,9 @@
  * as published by the Free Software Foundation; either version
  * 2 of the License, or (at your option) any later version.
  */
+#ifndef _UAPI_ASM_POWERPC_PTRACE_H
+#define _UAPI_ASM_POWERPC_PTRACE_H
+
 
 #include <linux/types.h>
 
@@ -108,6 +108,7 @@ struct pt_regs {
 #define PT_DAR	41
 #define PT_DSISR 42
 #define PT_RESULT 43
+#define PT_DSCR 44
 #define PT_REGS_COUNT 44
 
 #define PT_FPR0	48	/* each FP reg occupies 2 slots in this space */
@@ -146,40 +147,34 @@ struct pt_regs {
  * structures.  This also simplifies the implementation of a bi-arch
  * (combined (32- and 64-bit) gdb.
  */
-#define PTRACE_GETVRREGS	18
-#define PTRACE_SETVRREGS	19
+#define PTRACE_GETVRREGS	0x12
+#define PTRACE_SETVRREGS	0x13
 
 /* Get/set all the upper 32-bits of the SPE registers, accumulator, and
  * spefscr, in one go */
-#define PTRACE_GETEVRREGS	20
-#define PTRACE_SETEVRREGS	21
+#define PTRACE_GETEVRREGS	0x14
+#define PTRACE_SETEVRREGS	0x15
 
 /* Get the first 32 128bit VSX registers */
-#define PTRACE_GETVSRREGS	27
-#define PTRACE_SETVSRREGS	28
+#define PTRACE_GETVSRREGS	0x1b
+#define PTRACE_SETVSRREGS	0x1c
 
 /*
  * Get or set a debug register. The first 16 are DABR registers and the
  * second 16 are IABR registers.
  */
-#define PTRACE_GET_DEBUGREG	25
-#define PTRACE_SET_DEBUGREG	26
+#define PTRACE_GET_DEBUGREG	0x19
+#define PTRACE_SET_DEBUGREG	0x1a
 
 /* (new) PTRACE requests using the same numbers as x86 and the same
  * argument ordering. Additionally, they support more registers too
  */
-#define PTRACE_GETREGS            12
-#define PTRACE_SETREGS            13
-#define PTRACE_GETFPREGS          14
-#define PTRACE_SETFPREGS          15
-#define PTRACE_GETREGS64	  22
-#define PTRACE_SETREGS64	  23
-
-/* (old) PTRACE requests with inverted arguments */
-#define PPC_PTRACE_GETREGS	0x99	/* Get GPRs 0 - 31 */
-#define PPC_PTRACE_SETREGS	0x98	/* Set GPRs 0 - 31 */
-#define PPC_PTRACE_GETFPREGS	0x97	/* Get FPRs 0 - 31 */
-#define PPC_PTRACE_SETFPREGS	0x96	/* Set FPRs 0 - 31 */
+#define PTRACE_GETREGS            0xc
+#define PTRACE_SETREGS            0xd
+#define PTRACE_GETFPREGS          0xe
+#define PTRACE_SETFPREGS          0xf
+#define PTRACE_GETREGS64	  0x16
+#define PTRACE_SETREGS64	  0x17
 
 /* Calls to trace a 64bit program from a 32bit program */
 #define PPC_PTRACE_PEEKTEXT_3264 0x95
@@ -216,6 +211,7 @@ struct ppc_debug_info {
 #define PPC_DEBUG_FEATURE_INSN_BP_MASK		0x0000000000000002
 #define PPC_DEBUG_FEATURE_DATA_BP_RANGE		0x0000000000000004
 #define PPC_DEBUG_FEATURE_DATA_BP_MASK		0x0000000000000008
+#define PPC_DEBUG_FEATURE_DATA_BP_DAWR		0x0000000000000010
 
 #ifndef __ASSEMBLY__
 
@@ -262,4 +258,4 @@ struct ppc_hw_breakpoint {
 #define PPC_BREAKPOINT_CONDITION_BE(n)	\
 	(1<<((n)+PPC_BREAKPOINT_CONDITION_BE_SHIFT))
 
-#endif /* _ASM_POWERPC_PTRACE_H */
+#endif /* _UAPI_ASM_POWERPC_PTRACE_H */

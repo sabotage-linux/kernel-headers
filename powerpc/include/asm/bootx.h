@@ -6,8 +6,8 @@
  */
 
 
-#ifndef __ASM_BOOTX_H__
-#define __ASM_BOOTX_H__
+#ifndef _UAPI__ASM_BOOTX_H__
+#define _UAPI__ASM_BOOTX_H__
 
 #include <linux/types.h>
 
@@ -129,4 +129,4 @@ typedef struct boot_infos
 #pragma options align=reset
 #endif
 
-#endif
+#endif /* _UAPI__ASM_BOOTX_H__ */

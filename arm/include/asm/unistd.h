@@ -10,8 +10,8 @@
  * Please forward _all_ changes to this file to rmk@arm.linux.org.uk,
  * no matter what the change is.  Thanks!
  */
-#ifndef __ASM_ARM_UNISTD_H
-#define __ASM_ARM_UNISTD_H
+#ifndef _UAPI__ASM_ARM_UNISTD_H
+#define _UAPI__ASM_ARM_UNISTD_H
 
 #define __NR_OABI_SYSCALL_BASE	0x900000
 
@@ -404,6 +404,13 @@
 #define __NR_setns			(__NR_SYSCALL_BASE+375)
 #define __NR_process_vm_readv		(__NR_SYSCALL_BASE+376)
 #define __NR_process_vm_writev		(__NR_SYSCALL_BASE+377)
+#define __NR_kcmp			(__NR_SYSCALL_BASE+378)
+#define __NR_finit_module		(__NR_SYSCALL_BASE+379)
+
+/*
+ * This may need to be greater than __NR_last_syscall+1 in order to
+ * account for the padding in the syscall table
+ */
 
 /*
  * The following SWIs are ARM private.
@@ -424,6 +431,7 @@
 /*
  * The following syscalls are obsolete and no longer available for EABI.
  */
+#if !defined(__KERNEL__)
 #if defined(__ARM_EABI__)
 #undef __NR_time
 #undef __NR_umount
@@ -438,5 +446,6 @@
 #undef __NR_syscall
 #undef __NR_ipc
 #endif
+#endif
 
-#endif /* __ASM_ARM_UNISTD_H */
+#endif /* _UAPI__ASM_ARM_UNISTD_H */

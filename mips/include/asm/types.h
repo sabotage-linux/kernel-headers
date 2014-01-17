@@ -8,21 +8,20 @@
  *   written by Ralf Baechle
  * Copyright (C) 1999 Silicon Graphics, Inc.
  */
-#ifndef _ASM_TYPES_H
-#define _ASM_TYPES_H
+#ifndef _UAPI_ASM_TYPES_H
+#define _UAPI_ASM_TYPES_H
 
 /*
  * We don't use int-l64.h for the kernel anymore but still use it for
  * userspace to avoid code changes.
  */
+#ifndef __KERNEL__
 # if _MIPS_SZLONG == 64
 #  include <asm-generic/int-l64.h>
 # else
 #  include <asm-generic/int-ll64.h>
 # endif
+#endif
 
-/*
- * These aren't exported outside the kernel to avoid name space clashes
- */
 
-#endif /* _ASM_TYPES_H */
+#endif /* _UAPI_ASM_TYPES_H */

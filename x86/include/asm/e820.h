@@ -1,5 +1,5 @@
-#ifndef _ASM_X86_E820_H
-#define _ASM_X86_E820_H
+#ifndef _UAPI_ASM_X86_E820_H
+#define _UAPI_ASM_X86_E820_H
 #define E820MAP	0x2d0		/* our map */
 #define E820MAX	128		/* number of entries in E820MAP */
 
@@ -26,7 +26,9 @@
  * to collapse the next two #ifdef lines to a single line:
  *	#if defined(__KERNEL__) && defined(CONFIG_EFI)
  */
+#ifndef __KERNEL__
 #define E820_X_MAX E820MAX
+#endif
 
 #define E820NR	0x1e8		/* # entries in E820MAP */
 
@@ -35,6 +37,7 @@
 #define E820_ACPI	3
 #define E820_NVS	4
 #define E820_UNUSABLE	5
+
 
 /*
  * reserved RAM used by kernel itself
@@ -60,7 +63,7 @@ struct e820map {
 #define ISA_START_ADDRESS	0xa0000
 #define ISA_END_ADDRESS		0x100000
 
-#define BIOS_BEGIN		0x000c0000
+#define BIOS_BEGIN		0x000a0000
 #define BIOS_END		0x00100000
 
 #define BIOS_ROM_BASE		0xffe00000
@@ -69,4 +72,4 @@ struct e820map {
 #endif /* __ASSEMBLY__ */
 
 
-#endif /* _ASM_X86_E820_H */
+#endif /* _UAPI_ASM_X86_E820_H */

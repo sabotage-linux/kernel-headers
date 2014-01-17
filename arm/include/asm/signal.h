@@ -1,16 +1,18 @@
-#ifndef _ASMARM_SIGNAL_H
-#define _ASMARM_SIGNAL_H
+#ifndef _UAPI_ASMARM_SIGNAL_H
+#define _UAPI_ASMARM_SIGNAL_H
 
 #include <linux/types.h>
 
 /* Avoid too many header ordering problems.  */
 struct siginfo;
 
+#ifndef __KERNEL__
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 #define NSIG		32
 typedef unsigned long sigset_t;
 
+#endif /* __KERNEL__ */
 
 #define SIGHUP		 1
 #define SIGINT		 2
@@ -85,18 +87,12 @@ typedef unsigned long sigset_t;
 #define SA_NOMASK	SA_NODEFER
 #define SA_ONESHOT	SA_RESETHAND
 
-
-/* 
- * sigaltstack controls
- */
-#define SS_ONSTACK	1
-#define SS_DISABLE	2
-
 #define MINSIGSTKSZ	2048
 #define SIGSTKSZ	8192
 
 #include <asm-generic/signal-defs.h>
 
+#ifndef __KERNEL__
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
@@ -112,12 +108,13 @@ struct sigaction {
 #define sa_handler	_u._sa_handler
 #define sa_sigaction	_u._sa_sigaction
 
+#endif /* __KERNEL__ */
 
 typedef struct sigaltstack {
-	void *ss_sp;
+	void __user *ss_sp;
 	int ss_flags;
 	size_t ss_size;
 } stack_t;
 
 
-#endif
+#endif /* _UAPI_ASMARM_SIGNAL_H */

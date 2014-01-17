@@ -6,8 +6,8 @@
  * Copyright (C) 1996, 1997, 1999 by Ralf Baechle
  * Copyright (C) 1999 Silicon Graphics, Inc.
  */
-#ifndef _ASM_SIGCONTEXT_H
-#define _ASM_SIGCONTEXT_H
+#ifndef _UAPI_ASM_SIGCONTEXT_H
+#define _UAPI_ASM_SIGCONTEXT_H
 
 #include <linux/types.h>
 #include <asm/sgidefs.h>
@@ -75,4 +75,4 @@ struct sigcontext {
 
 #endif /* _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32 */
 
-#endif /* _ASM_SIGCONTEXT_H */
+#endif /* _UAPI_ASM_SIGCONTEXT_H */

@@ -1,5 +1,5 @@
-#ifndef _ASM_X86_MSR_H
-#define _ASM_X86_MSR_H
+#ifndef _UAPI_ASM_X86_MSR_H
+#define _UAPI_ASM_X86_MSR_H
 
 #include <asm/msr-index.h>
 
@@ -12,4 +12,4 @@
 #define X86_IOC_WRMSR_REGS	_IOWR('c', 0xA1, __u32[8])
 
 #endif /* __ASSEMBLY__ */
-#endif /* _ASM_X86_MSR_H */
+#endif /* _UAPI_ASM_X86_MSR_H */

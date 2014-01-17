@@ -20,17 +20,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _SPU_INFO_H
-#define _SPU_INFO_H
+#ifndef _UAPI_SPU_INFO_H
+#define _UAPI_SPU_INFO_H
 
 #include <linux/types.h>
 
+#ifndef __KERNEL__
 struct mfc_cq_sr {
 	__u64 mfc_cq_data0_RW;
 	__u64 mfc_cq_data1_RW;
 	__u64 mfc_cq_data2_RW;
 	__u64 mfc_cq_data3_RW;
 };
+#endif /* __KERNEL__ */
 
 struct spu_dma_info {
 	__u64 dma_info_type;
@@ -48,4 +50,4 @@ struct spu_proxydma_info {
 	struct mfc_cq_sr proxydma_info_command_data[8];
 };
 
-#endif
+#endif /* _UAPI_SPU_INFO_H */

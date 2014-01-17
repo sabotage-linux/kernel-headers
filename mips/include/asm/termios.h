@@ -6,8 +6,8 @@
  * Copyright (C) 1995, 1996, 2000, 2001 by Ralf Baechle
  * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
  */
-#ifndef _ASM_TERMIOS_H
-#define _ASM_TERMIOS_H
+#ifndef _UAPI_ASM_TERMIOS_H
+#define _UAPI_ASM_TERMIOS_H
 
 #include <linux/errno.h>
 #include <asm/termbits.h>
@@ -31,12 +31,12 @@ struct tchars {
 };
 
 struct ltchars {
-        char    t_suspc;        /* stop process signal */
-        char    t_dsuspc;       /* delayed stop process signal */
-        char    t_rprntc;       /* reprint line */
-        char    t_flushc;       /* flush output (toggles) */
-        char    t_werasc;       /* word erase */
-        char    t_lnextc;       /* literal next character */
+	char	t_suspc;	/* stop process signal */
+	char	t_dsuspc;	/* delayed stop process signal */
+	char	t_rprntc;	/* reprint line */
+	char	t_flushc;	/* flush output (toggles) */
+	char	t_werasc;	/* word erase */
+	char	t_lnextc;	/* literal next character */
 };
 
 /* TIOCGSIZE, TIOCSSIZE not defined yet.  Only needed for SunOS source
@@ -77,4 +77,4 @@ struct termio {
 #define TIOCM_LOOP	0x8000
 
 
-#endif /* _ASM_TERMIOS_H */
+#endif /* _UAPI_ASM_TERMIOS_H */

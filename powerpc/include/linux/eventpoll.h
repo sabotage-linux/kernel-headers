@@ -10,45 +10,62 @@
  *  Davide Libenzi <davidel@xmailserver.org>
  *
  */
-
 #ifndef _LINUX_EVENTPOLL_H
 #define _LINUX_EVENTPOLL_H
 
-/* For O_CLOEXEC */
-#include <linux/fcntl.h>
-#include <linux/types.h>
+#include <uapi/linux/eventpoll.h>
 
-/* Flags for epoll_create1.  */
-#define EPOLL_CLOEXEC O_CLOEXEC
 
-/* Valid opcodes to issue to sys_epoll_ctl() */
-#define EPOLL_CTL_ADD 1
-#define EPOLL_CTL_DEL 2
-#define EPOLL_CTL_MOD 3
+/* Forward declarations to avoid compiler errors */
+struct file;
 
-/* Set the One Shot behaviour for the target file descriptor */
-#define EPOLLONESHOT (1 << 30)
 
-/* Set the Edge Triggered behaviour for the target file descriptor */
-#define EPOLLET (1 << 31)
+#ifdef CONFIG_EPOLL
 
-/* 
- * On x86-64 make the 64bit structure have the same alignment as the
- * 32bit structure. This makes 32bit emulation easier.
- *
- * UML/x86_64 needs the same packing as x86_64
+/* Used to initialize the epoll bits inside the "struct file" */
+static inline void eventpoll_init_file(struct file *file)
+{
+	INIT_LIST_HEAD(&file->f_ep_links);
+	INIT_LIST_HEAD(&file->f_tfile_llink);
+}
+
+
+/* Used to release the epoll bits inside the "struct file" */
+void eventpoll_release_file(struct file *file);
+
+/*
+ * This is called from inside fs/file_table.c:__fput() to unlink files
+ * from the eventpoll interface. We need to have this facility to cleanup
+ * correctly files that are closed without being removed from the eventpoll
+ * interface.
  */
-#ifdef __x86_64__
-#define EPOLL_PACKED __attribute__((packed))
+static inline void eventpoll_release(struct file *file)
+{
+
+	/*
+	 * Fast check to avoid the get/release of the semaphore. Since
+	 * we're doing this outside the semaphore lock, it might return
+	 * false negatives, but we don't care. It'll help in 99.99% of cases
+	 * to avoid the semaphore lock. False positives simply cannot happen
+	 * because the file in on the way to be removed and nobody ( but
+	 * eventpoll ) has still a reference to this file.
+	 */
+	if (likely(list_empty(&file->f_ep_links)))
+		return;
+
+	/*
+	 * The file is being closed while it is still linked to an epoll
+	 * descriptor. We need to handle this by correctly unlinking it
+	 * from its containers.
+	 */
+	eventpoll_release_file(file);
+}
+
 #else
-#define EPOLL_PACKED
+
+static inline void eventpoll_init_file(struct file *file) {}
+static inline void eventpoll_release(struct file *file) {}
+
 #endif
 
-struct epoll_event {
-	__u32 events;
-	__u64 data;
-} EPOLL_PACKED;
-
-
 #endif /* #ifndef _LINUX_EVENTPOLL_H */
-

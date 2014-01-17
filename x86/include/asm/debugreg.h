@@ -1,5 +1,5 @@
-#ifndef _ASM_X86_DEBUGREG_H
-#define _ASM_X86_DEBUGREG_H
+#ifndef _UAPI_ASM_X86_DEBUGREG_H
+#define _UAPI_ASM_X86_DEBUGREG_H
 
 
 /* Indicate the register numbers for a number of the specific
@@ -77,4 +77,4 @@
  * HW breakpoint additions
  */
 
-#endif /* _ASM_X86_DEBUGREG_H */
+#endif /* _UAPI_ASM_X86_DEBUGREG_H */

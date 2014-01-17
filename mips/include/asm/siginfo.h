@@ -6,12 +6,12 @@
  * Copyright (C) 1998, 1999, 2001, 2003 Ralf Baechle
  * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
  */
-#ifndef _ASM_SIGINFO_H
-#define _ASM_SIGINFO_H
+#ifndef _UAPI_ASM_SIGINFO_H
+#define _UAPI_ASM_SIGINFO_H
 
 
 #define __ARCH_SIGEV_PREAMBLE_SIZE (sizeof(long) + 2*sizeof(int))
-#undef __ARCH_SI_TRAPNO	/* exception code needs to fill this ...  */
+#undef __ARCH_SI_TRAPNO /* exception code needs to fill this ...  */
 
 #define HAVE_ARCH_SIGINFO_T
 
@@ -25,11 +25,12 @@ struct siginfo;
 /*
  * Careful to keep union _sifields from shifting ...
  */
-#ifdef CONFIG_32BIT
+#if _MIPS_SZLONG == 32
 #define __ARCH_SI_PREAMBLE_SIZE (3 * sizeof(int))
-#endif
-#ifdef CONFIG_64BIT
+#elif _MIPS_SZLONG == 64
 #define __ARCH_SI_PREAMBLE_SIZE (4 * sizeof(int))
+#else
+#error _MIPS_SZLONG neither 32 nor 64
 #endif
 
 #include <asm-generic/siginfo.h>
@@ -45,55 +46,55 @@ typedef struct siginfo {
 
 		/* kill() */
 		struct {
-			__kernel_pid_t _pid;		/* sender's pid */
+			pid_t _pid;		/* sender's pid */
 			__ARCH_SI_UID_T _uid;	/* sender's uid */
 		} _kill;
 
 		/* POSIX.1b timers */
 		struct {
-			__kernel_timer_t _tid;		/* timer id */
+			timer_t _tid;		/* timer id */
 			int _overrun;		/* overrun count */
 			char _pad[sizeof( __ARCH_SI_UID_T) - sizeof(int)];
 			sigval_t _sigval;	/* same as below */
-			int _sys_private;       /* not to be passed to user */
+			int _sys_private;	/* not to be passed to user */
 		} _timer;
 
 		/* POSIX.1b signals */
 		struct {
-			__kernel_pid_t _pid;		/* sender's pid */
+			pid_t _pid;		/* sender's pid */
 			__ARCH_SI_UID_T _uid;	/* sender's uid */
 			sigval_t _sigval;
 		} _rt;
 
 		/* SIGCHLD */
 		struct {
-			__kernel_pid_t _pid;		/* which child */
+			pid_t _pid;		/* which child */
 			__ARCH_SI_UID_T _uid;	/* sender's uid */
 			int _status;		/* exit code */
-			__kernel_clock_t _utime;
-			__kernel_clock_t _stime;
+			clock_t _utime;
+			clock_t _stime;
 		} _sigchld;
 
 		/* IRIX SIGCHLD */
 		struct {
-			__kernel_pid_t _pid;		/* which child */
-			__kernel_clock_t _utime;
+			pid_t _pid;		/* which child */
+			clock_t _utime;
 			int _status;		/* exit code */
-			__kernel_clock_t _stime;
+			clock_t _stime;
 		} _irix_sigchld;
 
 		/* SIGILL, SIGFPE, SIGSEGV, SIGBUS */
 		struct {
-			void *_addr; /* faulting insn/memory ref. */
+			void __user *_addr; /* faulting insn/memory ref. */
 #ifdef __ARCH_SI_TRAPNO
 			int _trapno;	/* TRAP # which caused the signal */
 #endif
 			short _addr_lsb;
 		} _sigfault;
 
-		/* SIGPOLL, SIGXFSZ (To do ...)  */
+		/* SIGPOLL, SIGXFSZ (To do ...)	 */
 		struct {
-			__ARCH_SI_BAND_T _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
+			__ARCH_SI_BAND_T _band; /* POLL_IN, POLL_OUT, POLL_MSG */
 			int _fd;
 		} _sigpoll;
 	} _sifields;
@@ -111,4 +112,4 @@ typedef struct siginfo {
 #define SI_MESGQ __SI_CODE(__SI_MESGQ, -4) /* sent by real time mesq state change */
 
 
-#endif /* _ASM_SIGINFO_H */
+#endif /* _UAPI_ASM_SIGINFO_H */

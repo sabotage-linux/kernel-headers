@@ -7,7 +7,7 @@
  * as published by the Free Software Foundation; either version
  * 2 of the License, or (at your option) any later version.
  */
-
+#include <linux/compiler.h>
 #include <asm/ptrace.h>
 #ifdef __powerpc64__
 #include <asm/elf.h>
@@ -21,7 +21,7 @@ struct sigcontext {
 #endif
 	unsigned long	handler;
 	unsigned long	oldmask;
-	struct pt_regs	*regs;
+	struct pt_regs	__user *regs;
 #ifdef __powerpc64__
 	elf_gregset_t	gp_regs;
 	elf_fpregset_t	fp_regs;
@@ -79,7 +79,7 @@ struct sigcontext {
  * backwards compatility to store VSR 0-31 doubleword 1 after the VMX
  * registers and vscr/vrsave.
  */
-	elf_vrreg_t	*v_regs;
+	elf_vrreg_t	__user *v_regs;
 	long		vmx_reserve[ELF_NVRREG+ELF_NVRREG+32+1];
 #endif
 };

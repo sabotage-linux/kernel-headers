@@ -11,8 +11,8 @@
  *  hardware it's running on.  See Documentation/arm/Setup
  *  for more info.
  */
-#ifndef __ASMARM_SETUP_H
-#define __ASMARM_SETUP_H
+#ifndef _UAPI__ASMARM_SETUP_H
+#define _UAPI__ASMARM_SETUP_H
 
 #include <linux/types.h>
 
@@ -184,4 +184,4 @@ struct tagtable {
 	for (t = base; t->hdr.size; t = tag_next(t))
 
 
-#endif
+#endif /* _UAPI__ASMARM_SETUP_H */

@@ -97,6 +97,9 @@
 #define TIOCGDEV	_IOR('T',0x32, unsigned int) /* Get primary device node of /dev/console */
 #define TIOCSIG		_IOW('T',0x36, int)  /* Generate signal on Pty slave */
 #define TIOCVHANGUP	0x5437
+#define TIOCGPKT	_IOR('T', 0x38, int) /* Get packet mode state */
+#define TIOCGPTLCK	_IOR('T', 0x39, int) /* Get Pty lock state */
+#define TIOCGEXCL	_IOR('T', 0x40, int) /* Get exclusive mode state */
 
 #define TIOCSERCONFIG	0x5453
 #define TIOCSERGWILD	0x5454
@@ -111,6 +114,6 @@
 #define TIOCSERSETMULTI 0x545B /* Set multiport config */
 
 #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
-#define TIOCGICOUNT	0x545D	/* read serial port __inline__ interrupt counts */
+#define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
 
 #endif	/* _ASM_POWERPC_IOCTLS_H */
