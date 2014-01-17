@@ -2,16 +2,9 @@
  * wanrouter.h	Legacy declarations kept around until X25 is removed
  */
 
-#ifndef _UAPI_ROUTER_H
-#define _UAPI_ROUTER_H
+#ifndef	_ROUTER_H
+#define	_ROUTER_H
 
-/* 'state' defines */
-enum wan_states
-{
-	WAN_UNCONFIGURED,	/* link/channel is not configured */
-	WAN_DISCONNECTED,	/* link/channel is disconnected */
-	WAN_CONNECTING,		/* connection is in progress */
-	WAN_CONNECTED		/* link/channel is operational */
-};
+#include <uapi/linux/wanrouter.h>
 
-#endif /* _UAPI_ROUTER_H */
+#endif	/* _ROUTER_H */

@@ -1,9 +1,9 @@
-#ifndef _UAPI__linux_video_edid_h__
-#define _UAPI__linux_video_edid_h__
+#ifndef __linux_video_edid_h__
+#define __linux_video_edid_h__
 
-struct edid_info {
-	unsigned char dummy[128];
-};
+#include <uapi/video/edid.h>
 
-
-#endif /* _UAPI__linux_video_edid_h__ */
+#ifdef CONFIG_X86
+extern struct edid_info edid_info;
+#endif
+#endif /* __linux_video_edid_h__ */
