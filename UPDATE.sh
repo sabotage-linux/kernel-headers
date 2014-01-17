@@ -15,7 +15,8 @@ do
   do
     cp -a $1/include/$dir $arch/include/
   done
-  cp -a $1/arch/$arch/include/uapi/asm $arch/include/
+  cp -a $1/arch/$arch/include/asm $arch/include
+  cp -a $1/arch/$arch/include/uapi/asm $arch/include/uapi
   git add $arch/include
 done
 
