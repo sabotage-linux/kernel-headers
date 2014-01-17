@@ -8,20 +8,26 @@
  *   written by Ralf Baechle
  * Copyright (C) 1999 Silicon Graphics, Inc.
  */
-#ifndef _UAPI_ASM_TYPES_H
-#define _UAPI_ASM_TYPES_H
+#ifndef _ASM_TYPES_H
+#define _ASM_TYPES_H
+
+# include <asm-generic/int-ll64.h>
+#include <uapi/asm/types.h>
 
 /*
- * We don't use int-l64.h for the kernel anymore but still use it for
- * userspace to avoid code changes.
+ * These aren't exported outside the kernel to avoid name space clashes
  */
-#ifndef __KERNEL__
-# if _MIPS_SZLONG == 64
-#  include <asm-generic/int-l64.h>
-# else
-#  include <asm-generic/int-ll64.h>
-# endif
+#ifndef __ASSEMBLY__
+
+/*
+ * Don't use phys_t.  You've been warned.
+ */
+#ifdef CONFIG_64BIT_PHYS_ADDR
+typedef unsigned long long phys_t;
+#else
+typedef unsigned long phys_t;
 #endif
 
+#endif /* __ASSEMBLY__ */
 
-#endif /* _UAPI_ASM_TYPES_H */
+#endif /* _ASM_TYPES_H */
