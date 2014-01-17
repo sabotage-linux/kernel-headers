@@ -5,10 +5,12 @@
  *
  * Copyright (C) 2008 Nokia Corporation. All rights reserved.
  */
-#ifndef LINUX_IF_PHONET_H
-#define LINUX_IF_PHONET_H
+#ifndef _UAPILINUX_IF_PHONET_H
+#define _UAPILINUX_IF_PHONET_H
 
-#include <uapi/linux/if_phonet.h>
+#define PHONET_MIN_MTU		6	/* pn_length = 0 */
+#define PHONET_MAX_MTU		65541	/* pn_length = 0xffff */
+#define PHONET_DEV_MTU		PHONET_MAX_MTU
 
-extern struct header_ops phonet_header_ops;
-#endif
+
+#endif /* _UAPILINUX_IF_PHONET_H */
