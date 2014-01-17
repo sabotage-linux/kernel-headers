@@ -21,6 +21,9 @@ do
     cp -a $1/usr/include/$dir $arch/include/
   done
   cp -a $1/usr/include/asm-$arch $arch/include/asm
+  # de-cruft
+  find . -name '..install.cmd' | xargs git rm
+  find . -name '.install' | xargs git rm
   git add $arch/include
 done
 
