@@ -7,7 +7,7 @@ if [ "$#" -ne 1 ] || ! [ -d "$1" ]; then
   exit 1
 fi
 
-for arch in arm powerpc mips x86_64
+for arch in arm powerpc mips x86
 do
   git rm -r $arch/include/*
   mkdir -p $arch/include
