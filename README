@@ -8,3 +8,8 @@ get the headers is overkill.
 this currently uses headers of kernel 3.12.6, which is what
 Debian is now using. There is a previous 3.3.4 branch.
 
+Installation:
+$ make ARCH=xxx prefix=/usr DESTDIR=/opt/package install
+where ARCH is the name of one of the arch-specific directories.
+for example, i386, x86_64, x32, powerpc, mips, microblaze.
+
