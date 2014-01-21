@@ -21,6 +21,7 @@ rm -rf $projver/.gitignore
 rm -rf $projver/docs
 rm $projver/*.sh
 
-tar cJf $proj.tar.xz $projver/
+tar cf $proj.tar $projver/
+xz -z -9 -e -c < $proj.tar > $proj.tar.xz
 mv $proj.tar.xz $me/$projver.tar.xz
 echo done
