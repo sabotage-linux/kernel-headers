@@ -50,6 +50,12 @@
 
 #ifndef __KERNEL__ /* we're used from userspace */
 
+#ifdef _NETINET_IF_ETHER_H /* musl */
+#define __UAPI_DEF_ETHHDR 0
+#else /* glibc uses __NETINET_IF_ETHER_H, and includes the kernel header. */
+#define __UAPI_DEF_ETHHDR 1
+#endif
+
 /* Coordinate with libc netinet/in.h header. */
 #if defined(_NETINET_IN_H)
 
