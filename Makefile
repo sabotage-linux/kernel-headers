@@ -7,14 +7,22 @@ includedir = $(prefix)/include
 
 LEVELS = * */* */*/* */*/*/* */*/*/*/*
 ALL_INCLUDES = $(sort $(wildcard $(LEVELS:%=$(ARCH)/include/%.h)))
+INSTALL_HDR_PATH = $(DESTDIR)$(prefix)
 
 -include config.mak
 
 ARCH ?= $(error ARCH must be set)
 
-install: $(ALL_INCLUDES:$(ARCH)/include/%=$(DESTDIR)$(includedir)/%)
+all:
+defconfig:
+mmu_config:
+g5_defconfig:
 
-$(DESTDIR)$(includedir)/%: $(ARCH)/include/%
+headers_install: install
+
+install: $(ALL_INCLUDES:$(ARCH)/include/%=$(INSTALL_HDR_PATH)/include/%)
+
+$(INSTALL_HDR_PATH)/include/%: $(ARCH)/include/%
 	install -D -m 644 $< $@
 
-.PHONY: install
+.PHONY: install headers_install all defconfig mmu_config g5_defconfig
