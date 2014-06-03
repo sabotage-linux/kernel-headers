@@ -56,6 +56,12 @@
 #define __UAPI_DEF_ETHHDR 1
 #endif
 
+#ifdef _NETINET_TCP_H /* musl */
+#define __UAPI_DEF_TCPHDR 0
+#else
+#define __UAPI_DEF_TCPHDR 1
+#endif
+
 /* Coordinate with libc netinet/in.h header. */
 #if defined(_NETINET_IN_H)
 
