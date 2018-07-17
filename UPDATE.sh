@@ -20,7 +20,7 @@ do
 done
 
 # these headers are missing from headers_install_all
-cp -a $1/include/uapi/linux/{a.out,kvm,kvm_para}.h generic/include/linux/
+cp -a $1/include/uapi/linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
 
 find generic -name '..install.cmd' | xargs rm
 find generic -name '.install' | xargs rm
