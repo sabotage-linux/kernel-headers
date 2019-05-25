@@ -48,8 +48,19 @@
 #ifndef _LIBC_COMPAT_H
 #define _LIBC_COMPAT_H
 
-/* We have included glibc headers... */
-#if defined(__GLIBC__)
+#ifndef __KERNEL__ /* we're used from userspace */
+
+#ifdef _NETINET_IF_ETHER_H /* musl */
+#define __UAPI_DEF_ETHHDR 0
+#else /* glibc uses __NETINET_IF_ETHER_H, and includes the kernel header. */
+#define __UAPI_DEF_ETHHDR 1
+#endif
+
+#ifdef _NETINET_TCP_H /* musl */
+#define __UAPI_DEF_TCPHDR 0
+#else
+#define __UAPI_DEF_TCPHDR 1
+#endif
 
 /* Coordinate with glibc netinet/in.h header. */
 #if defined(_NETINET_IN_H)
@@ -68,11 +79,7 @@
  * if the glibc code didn't define them. This guard matches
  * the guard in glibc/inet/netinet/in.h which defines the
  * additional in6_addr macros e.g. s6_addr16, and s6_addr32. */
-#if defined(__USE_MISC) || defined (__USE_GNU)
 #define __UAPI_DEF_IN6_ADDR_ALT		0
-#else
-#define __UAPI_DEF_IN6_ADDR_ALT		1
-#endif
 #define __UAPI_DEF_SOCKADDR_IN6		0
 #define __UAPI_DEF_IPV6_MREQ		0
 #define __UAPI_DEF_IPPROTO_V6		0
