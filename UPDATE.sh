@@ -22,8 +22,8 @@ done
 # these headers are missing from headers_install_all
 cp -a $1/include/uapi/linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
 
-find generic -name '..install.cmd' | xargs rm
-find generic -name '.install' | xargs rm
+find generic -name '..install.cmd' -delete
+find generic -name '.install' -delete
 git add generic/include/
 
 for arch in arm arm64 powerpc mips x86 microblaze openrisc
@@ -35,8 +35,8 @@ do
     ln -s ../../generic/include/$dir $arch/include/$dir
   done
   cp -a $1/usr/include/asm-$arch $arch/include/asm
-  find $arch -name '..install.cmd' | xargs rm
-  find $arch -name '.install' | xargs rm
+  find $arch -name '..install.cmd' -delete
+  find $arch -name '.install' -delete
   git add $arch/include
 done
 
