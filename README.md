@@ -10,8 +10,9 @@ some minor issues are fixed, plus libc-compat.h is patched
 to offer the same level of support for musl libc as the vanilla
 headers offer for glibc.
 
-we currently use the headers of kernel 3.12.6, which is what
-Debian is now using. There is a previous 3.3.4 branch.
+we currently use the headers of kernel 4.4.2, which is what
+musl-cross-make is now using. It's also a long-term-support kernel.
+There is a previous 3.3.4 and a 3.12.6 branch.
 
 Installation:
 -------------
@@ -33,12 +34,12 @@ Adding a new arch:
 ------------------
 
     export ARCH=xxx
-    tar xf linux-3.12.6.tar.xz && cd linux-3.12.6
+    tar xf linux-4.4.2.tar.xz && cd linux-4.4.2
     CC=false make V=1 ARCH=$ARCH INSTALL_HDR_PATH=dest headers_install
     rm dest/include/asm/.*install*
     cd ..
     cp -r sh $ARCH
     rm -rf $ARCH/include/asm
-    cp -r linux-3.12.6/dest/include/asm $ARCH/include
-    rm -rf linux-3.12.6
+    cp -r linux-4.4.2/dest/include/asm $ARCH/include
+    rm -rf linux-4.4.2
 
