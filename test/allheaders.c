@@ -27,7 +27,6 @@ typedef __kernel_size_t size_t;
 #include <linux/ncp_fs.h>
 #include <linux/jffs2.h>
 #include <linux/rds.h>
-#include <linux/generic_serial.h>
 #include <linux/fuse.h>
 #include <linux/arcfb.h>
 #include <linux/futex.h>
@@ -90,7 +89,6 @@ typedef __kernel_size_t size_t;
 #include <linux/if_bridge.h>
 #include <linux/mempolicy.h>
 #include <linux/selinux_netlink.h>
-#include <linux/if_ec.h>
 #include <linux/sonypi.h>
 #include <linux/errno.h>
 #include <linux/nubus.h>
@@ -137,7 +135,6 @@ typedef __kernel_size_t size_t;
 #include <linux/ipmi_msgdefs.h>
 #include <linux/msdos_fs.h>
 #include <linux/netfilter_ipv6/ip6t_REJECT.h>
-#include <linux/netfilter_ipv6/ip6t_LOG.h>
 #include <linux/netfilter_ipv6/ip6t_HL.h>
 #include <linux/netfilter_ipv6/ip6t_opts.h>
 #include <linux/netfilter_ipv6/ip6t_frag.h>
@@ -148,16 +145,11 @@ typedef __kernel_size_t size_t;
 #include <linux/netfilter_ipv6/ip6t_mh.h>
 #include <linux/netfilter_ipv6/ip6_tables.h>
 #include <linux/netfilter_ipv4/ipt_ULOG.h>
-#include <linux/netfilter_ipv4/ipt_realm.h>
 #include <linux/netfilter_ipv4/ipt_ECN.h>
-#include <linux/netfilter_ipv4/ipt_LOG.h>
-#include <linux/netfilter_ipv4/ipt_addrtype.h>
-#include <linux/netfilter_ipv4/ipt_SAME.h>
 #include <linux/netfilter_ipv4/ipt_ah.h>
 #include <linux/netfilter_ipv4/ipt_ecn.h>
 #include <linux/netfilter_ipv4/ip_tables.h>
 #include <linux/netfilter_ipv4/ipt_ttl.h>
-#include <linux/netfilter_ipv4/ip_queue.h>
 #include <linux/netfilter_ipv4/ipt_TTL.h>
 #include <linux/netfilter_ipv4/ipt_REJECT.h>
 #include <linux/netfilter_ipv4/ipt_CLUSTERIP.h>
@@ -419,7 +411,6 @@ typedef __kernel_size_t size_t;
 #include <linux/nfsd/export.h>
 #include <linux/nfs4_mount.h>
 #include <linux/mtio.h>
-#include <linux/ext2_fs.h>
 #include <linux/netfilter_ipv4.h>
 #include <linux/isdn/capicmd.h>
 #include <linux/hiddev.h>
@@ -433,7 +424,6 @@ typedef __kernel_size_t size_t;
 #include <linux/mqueue.h>
 #include <linux/mii.h>
 #include <linux/lp.h>
-#include <linux/if_strip.h>
 #include <linux/serio.h>
 #include <linux/wimax.h>
 #include <linux/netfilter_bridge.h>
@@ -445,7 +435,6 @@ typedef __kernel_size_t size_t;
 #include <linux/if_cablemodem.h>
 #include <linux/snmp.h>
 #include <linux/suspend_ioctls.h>
-#include <linux/kvm.h>
 #include <linux/tipc_config.h>
 #include <linux/if_plip.h>
 #include <linux/dlm.h>
@@ -509,14 +498,12 @@ typedef __kernel_size_t size_t;
 #include <linux/chio.h>
 #include <linux/gameport.h>
 #include <linux/dlm_plock.h>
-#include <linux/if_tr.h>
 #include <linux/kdev_t.h>
 #include <linux/wait.h>
 #include <linux/stat.h>
 #include <linux/hysdn_if.h>
 #include <linux/telephony.h>
 #include <linux/net_tstamp.h>
-#include <linux/cdk.h>
 #include <linux/signal.h>
 #include <linux/cramfs_fs.h>
 #include <linux/ppp-comp.h>
@@ -526,7 +513,6 @@ typedef __kernel_size_t size_t;
 #include <linux/pktcdvd.h>
 #include <linux/icmpv6.h>
 #include <linux/rtnetlink.h>
-#include <linux/comstats.h>
 #include <linux/mmtimer.h>
 #include <linux/rfkill.h>
 #include <linux/caif/caif_socket.h>
@@ -546,7 +532,6 @@ typedef __kernel_size_t size_t;
 #include <linux/iso_fs.h>
 #include <linux/virtio_net.h>
 #include <linux/shm.h>
-#include <linux/blk_types.h>
 #include <linux/nbd.h>
 #include <linux/ipx.h>
 #include <linux/ipv6.h>
@@ -640,11 +625,13 @@ typedef __kernel_size_t size_t;
 #include <drm/sis_drm.h>
 #include <drm/nouveau_drm.h>
 #include <drm/drm_sarea.h>
-#include <xen/privcmd.h>
+//#include <xen/privcmd.h>
 #include <xen/evtchn.h>
 #include <video/uvesafb.h>
 #include <video/edid.h>
 #include <video/sisfb.h>
+
+//#include <linux/kvm.h>
 
 int main() {
   return 0;
