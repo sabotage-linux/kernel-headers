@@ -164,6 +164,9 @@
 /* Definitions for xattr.h */
 #define __UAPI_DEF_XATTR		1
 
+#define __UAPI_DEF_TCPHDR 1
+#define __UAPI_DEF_ETHHDR 1
+
 #define __UAPI_DEF_TIMESPEC 1
 #define __UAPI_DEF_ITIMERSPEC 1
 #define __UAPI_DEF_TIMEVAL 1
