@@ -9,8 +9,9 @@
 #define _INPUT_H
 
 
-#include <linux/time.h>
-#include <linux/ioctl.h>
+#include <sys/time.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
 #include <linux/types.h>
 
 #include "input-event-codes.h"
