@@ -18,11 +18,9 @@
 #define _LINUX_TCP_H
 
 #include <linux/types.h>
-#include <linux/libc-compat.h>
 #include <asm/byteorder.h>
 #include <linux/socket.h>
 
-#if __UAPI_DEF_TCPHDR
 struct tcphdr {
 	__be16	source;
 	__be16	dest;
@@ -57,7 +55,6 @@ struct tcphdr {
 	__sum16	check;
 	__be16	urg_ptr;
 };
-#endif
 
 /*
  *	The union cast uses a gcc extension to avoid aliasing problems
@@ -115,6 +112,9 @@ enum {
 #define TCP_FASTOPEN		23	/* Enable FastOpen on listeners */
 #define TCP_TIMESTAMP		24
 #define TCP_NOTSENT_LOWAT	25	/* limit number of unsent bytes in write queue */
+#define TCP_CC_INFO		26	/* Get Congestion Control (optional) info */
+#define TCP_SAVE_SYN		27	/* Record SYN headers for new connections */
+#define TCP_SAVED_SYN		28	/* Get SYN headers recorded for connection */
 
 struct tcp_repair_opt {
 	__u32	opt_code;
@@ -189,6 +189,13 @@ struct tcp_info {
 	__u32	tcpi_rcv_space;
 
 	__u32	tcpi_total_retrans;
+
+	__u64	tcpi_pacing_rate;
+	__u64	tcpi_max_pacing_rate;
+	__u64	tcpi_bytes_acked;    /* RFC4898 tcpEStatsAppHCThruOctetsAcked */
+	__u64	tcpi_bytes_received; /* RFC4898 tcpEStatsAppHCThruOctetsReceived */
+	__u32	tcpi_segs_out;	     /* RFC4898 tcpEStatsPerfSegsOut */
+	__u32	tcpi_segs_in;	     /* RFC4898 tcpEStatsPerfSegsIn */
 };
 
 /* for TCP_MD5SIG socket option */
