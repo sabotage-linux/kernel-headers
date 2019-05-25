@@ -62,6 +62,25 @@
 #define __UAPI_DEF_TCPHDR 1
 #endif
 
+#ifdef _TIME_H /* musl */
+#define __UAPI_DEF_TIMESPEC 0
+#define __UAPI_DEF_ITIMERSPEC 0
+#else
+#define __UAPI_DEF_TIMESPEC 1
+#define __UAPI_DEF_ITIMERSPEC 1
+#endif
+
+#ifdef _SYS_TIME_H /* musl */
+#define __UAPI_DEF_TIMEVAL 0
+#define __UAPI_DEF_ITIMERVAL 0
+#define __UAPI_DEF_TIMEZONE 0
+#else
+#define __UAPI_DEF_TIMEVAL 1
+#define __UAPI_DEF_ITIMERVAL 1
+#define __UAPI_DEF_TIMEZONE 1
+#endif
+
+
 /* Coordinate with glibc netinet/in.h header. */
 #if defined(_NETINET_IN_H)
 
@@ -144,6 +163,13 @@
 
 /* Definitions for xattr.h */
 #define __UAPI_DEF_XATTR		1
+
+#define __UAPI_DEF_TIMESPEC 1
+#define __UAPI_DEF_ITIMERSPEC 1
+#define __UAPI_DEF_TIMEVAL 1
+#define __UAPI_DEF_ITIMERVAL 1
+#define __UAPI_DEF_TIMEZONE 1
+
 
 #endif /* __GLIBC__ */
 

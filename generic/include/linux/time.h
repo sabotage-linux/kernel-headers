@@ -2,25 +2,32 @@
 #define _LINUX_TIME_H
 
 #include <linux/types.h>
+#include <linux/libc-compat.h>
 
 
 #ifndef _STRUCT_TIMESPEC
 #define _STRUCT_TIMESPEC
+#if __UAPI_DEF_TIMESPEC
 struct timespec {
 	__kernel_time_t	tv_sec;			/* seconds */
 	long		tv_nsec;		/* nanoseconds */
 };
 #endif
+#endif
 
+#if __UAPI_DEF_TIMEVAL
 struct timeval {
 	__kernel_time_t		tv_sec;		/* seconds */
 	__kernel_suseconds_t	tv_usec;	/* microseconds */
 };
+#endif
 
+#if __UAPI_DEF_TIMEZONE
 struct timezone {
 	int	tz_minuteswest;	/* minutes west of Greenwich */
 	int	tz_dsttime;	/* type of dst correction */
 };
+#endif
 
 
 /*
@@ -31,15 +38,19 @@ struct timezone {
 #define	ITIMER_VIRTUAL		1
 #define	ITIMER_PROF		2
 
+#if __UAPI_DEF_ITIMERSPEC
 struct itimerspec {
 	struct timespec it_interval;	/* timer period */
 	struct timespec it_value;	/* timer expiration */
 };
+#endif
 
+#if __UAPI_DEF_ITIMERVAL
 struct itimerval {
 	struct timeval it_interval;	/* timer interval */
 	struct timeval it_value;	/* current value */
 };
+#endif
 
 /*
  * The IDs of the various system clocks (for POSIX.1b interval timers):
@@ -64,6 +75,8 @@ struct itimerval {
 /*
  * The various flags for setting POSIX.1b interval timers:
  */
+#ifndef TIMER_ABSTIME
 #define TIMER_ABSTIME			0x01
+#endif
 
 #endif /* _LINUX_TIME_H */
