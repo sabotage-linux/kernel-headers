@@ -12,6 +12,8 @@ if [ "$#" -ne 1 ] || ! [ -d "$1" ]; then
   exit 1
 fi
 
+cp generic/include/linux/module.h module.h.tmp
+
 git rm -rf generic/include/*
 mkdir -p generic/include
 for dir in asm-generic drm linux mtd rdma scsi sound video xen uapi
@@ -50,4 +52,7 @@ do
   find $arch -name '.install' -delete
   git add $arch/include
 done
+
+test -e generic/include/linux/module.h || \
+  mv module.h.tmp generic/include/linux/module.h
 
