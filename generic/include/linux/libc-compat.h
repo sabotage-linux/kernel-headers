@@ -80,6 +80,21 @@
 #define __UAPI_DEF_TIMEZONE 1
 #endif
 
+#ifdef _NET_IF_H /* musl */
+#define __UAPI_DEF_IF_IFNAMSIZ 0
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO 0
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS 0
+#define __UAPI_DEF_IF_IFMAP 0
+#define __UAPI_DEF_IF_IFREQ 0
+#define __UAPI_DEF_IF_IFCONF 0
+#else
+#define __UAPI_DEF_IF_IFNAMSIZ 1
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO 1
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS 1
+#define __UAPI_DEF_IF_IFMAP 1
+#define __UAPI_DEF_IF_IFREQ 1
+#define __UAPI_DEF_IF_IFCONF 1
+#endif
 
 /* Coordinate with glibc netinet/in.h header. */
 #if defined(_NETINET_IN_H)
@@ -173,6 +188,12 @@
 #define __UAPI_DEF_ITIMERVAL 1
 #define __UAPI_DEF_TIMEZONE 1
 
+#define __UAPI_DEF_IF_IFNAMSIZ 1
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO 1
+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS 1
+#define __UAPI_DEF_IF_IFMAP 1
+#define __UAPI_DEF_IF_IFREQ 1
+#define __UAPI_DEF_IF_IFCONF 1
 
 #endif /* __GLIBC__ */
 
