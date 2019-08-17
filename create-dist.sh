@@ -5,7 +5,7 @@ if [ -z "$VER" ] ; then
 fi
 me=`pwd`
 
-proj=kernel-headers
+proj=linux-headers
 projver=${proj}-${VER}
 repo="$me"
 
