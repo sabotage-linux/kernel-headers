@@ -16,7 +16,7 @@ cp generic/include/linux/module.h module.h.tmp
 
 git rm -rf generic/include/*
 mkdir -p generic/include
-for dir in asm-generic drm linux mtd rdma scsi sound video xen uapi
+for dir in asm-generic drm linux mtd rdma scsi sound video xen
 do
   if test -d $1/usr/include/$dir ; then
     cp -RP $1/usr/include/$dir generic/include/
@@ -41,7 +41,7 @@ for arch in arm arm64 powerpc mips x86 microblaze openrisc sh
 do
   git rm -rf $arch/include/*
   mkdir -p $arch/include
-  for dir in arch asm-generic drm linux mtd rdma scsi sound uapi video xen
+  for dir in arch asm-generic drm linux mtd rdma scsi sound video xen
   do
     test -d generic/include/$dir && \
       ln -s ../../generic/include/$dir $arch/include/$dir
