@@ -30,6 +30,9 @@ test -d $1/usr/include/uapi && uapi_base=uapi/
 # these headers are missing from headers_install_all
 cp -RP $1/include/${uapi_base}linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
 
+test -e generic/include/linux/module.h || \
+  mv module.h.tmp generic/include/linux/module.h
+
 find generic -name '..install.cmd' -exec rm {} +
 find generic -name '.install' -exec rm {} +
 git add generic/include/
@@ -52,7 +55,3 @@ do
   find $arch -name '.install' -exec rm {} +
   git add $arch/include
 done
-
-test -e generic/include/linux/module.h || \
-  mv module.h.tmp generic/include/linux/module.h
-
