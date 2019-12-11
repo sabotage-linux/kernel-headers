@@ -1,0 +1,26 @@
+From 3c2064e430f52eeac694ac2832d18cb012c2aab6 Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Sat, 25 May 2019 21:37:04 +0100
+Subject: [PATCH] fix in-kernel use of tcp/ethhdr
+
+---
+ generic/include/linux/libc-compat.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/generic/include/linux/libc-compat.h b/generic/include/linux/libc-compat.h
+index 062969b..8280d89 100644
+--- a/generic/include/linux/libc-compat.h
++++ b/generic/include/linux/libc-compat.h
+@@ -164,6 +164,9 @@
+ /* Definitions for xattr.h */
+ #define __UAPI_DEF_XATTR		1
+ 
++#define __UAPI_DEF_TCPHDR 1
++#define __UAPI_DEF_ETHHDR 1
++
+ #define __UAPI_DEF_TIMESPEC 1
+ #define __UAPI_DEF_ITIMERSPEC 1
+ #define __UAPI_DEF_TIMEVAL 1
+-- 
+2.20.1
+

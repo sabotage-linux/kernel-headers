@@ -1,0 +1,41 @@
+From 04b07fc6a6b314dc2c832e63f8edc431885b827c Mon Sep 17 00:00:00 2001
+From: rofl0r <retnyg@gmx.net>
+Date: Wed, 22 Jan 2014 00:48:28 +0100
+Subject: [PATCH] libc-compat.h: fix some issues arising from in6.h
+
+namely redefinition of some structs provided by netinet/in.h.
+
+[Original fix modified with changes from cdd6ecd171]
+---
+ generic/include/linux/libc-compat.h | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/generic/include/linux/libc-compat.h b/generic/include/linux/libc-compat.h
+index 9bed5b6..c3bad53 100644
+--- a/generic/include/linux/libc-compat.h
++++ b/generic/include/linux/libc-compat.h
+@@ -48,8 +48,7 @@
+ #ifndef _LIBC_COMPAT_H
+ #define _LIBC_COMPAT_H
+ 
+-/* We have included glibc headers... */
+-#if defined(__GLIBC__)
++#ifndef __KERNEL__ /* we're used from userspace */
+ 
+ /* Coordinate with glibc netinet/in.h header. */
+ #if defined(_NETINET_IN_H)
+@@ -68,11 +67,7 @@
+  * if the glibc code didn't define them. This guard matches
+  * the guard in glibc/inet/netinet/in.h which defines the
+  * additional in6_addr macros e.g. s6_addr16, and s6_addr32. */
+-#if defined(__USE_MISC) || defined (__USE_GNU)
+ #define __UAPI_DEF_IN6_ADDR_ALT		0
+-#else
+-#define __UAPI_DEF_IN6_ADDR_ALT		1
+-#endif
+ #define __UAPI_DEF_SOCKADDR_IN6		0
+ #define __UAPI_DEF_IPV6_MREQ		0
+ #define __UAPI_DEF_IPPROTO_V6		0
+-- 
+2.20.1
+

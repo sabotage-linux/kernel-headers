@@ -1,0 +1,54 @@
+From 2deefcf6374fe58988b3052987072243dd483d5d Mon Sep 17 00:00:00 2001
+From: rofl0r <retnyg@gmx.net>
+Date: Tue, 3 Jun 2014 13:54:36 +0200
+Subject: [PATCH] fix redefinition of struct tcphdr
+
+---
+ generic/include/linux/libc-compat.h | 6 ++++++
+ generic/include/linux/tcp.h         | 3 +++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/generic/include/linux/libc-compat.h b/generic/include/linux/libc-compat.h
+index 902e17c..306d84d 100644
+--- a/generic/include/linux/libc-compat.h
++++ b/generic/include/linux/libc-compat.h
+@@ -56,6 +56,12 @@
+ #define __UAPI_DEF_ETHHDR 1
+ #endif
+ 
++#ifdef _NETINET_TCP_H /* musl */
++#define __UAPI_DEF_TCPHDR 0
++#else
++#define __UAPI_DEF_TCPHDR 1
++#endif
++
+ /* Coordinate with glibc netinet/in.h header. */
+ #if defined(_NETINET_IN_H)
+ 
+diff --git a/generic/include/linux/tcp.h b/generic/include/linux/tcp.h
+index 1e9b4a6..26dc712 100644
+--- a/generic/include/linux/tcp.h
++++ b/generic/include/linux/tcp.h
+@@ -18,9 +18,11 @@
+ #define _LINUX_TCP_H
+ 
+ #include <linux/types.h>
++#include <linux/libc-compat.h>
+ #include <asm/byteorder.h>
+ #include <linux/socket.h>
+ 
++#if __UAPI_DEF_TCPHDR
+ struct tcphdr {
+ 	__be16	source;
+ 	__be16	dest;
+@@ -55,6 +57,7 @@ struct tcphdr {
+ 	__sum16	check;
+ 	__be16	urg_ptr;
+ };
++#endif
+ 
+ /*
+  *	The union cast uses a gcc extension to avoid aliasing problems
+-- 
+2.20.1
+

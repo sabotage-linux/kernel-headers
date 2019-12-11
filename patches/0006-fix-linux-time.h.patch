@@ -1,0 +1,123 @@
+From a8af11f7b98254d9c74388de9cd45e1d4c2cd87c Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Sat, 25 May 2019 21:34:42 +0100
+Subject: [PATCH] fix linux/time.h
+
+---
+ generic/include/linux/libc-compat.h | 26 ++++++++++++++++++++++++++
+ generic/include/linux/time.h        | 13 +++++++++++++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/generic/include/linux/libc-compat.h b/generic/include/linux/libc-compat.h
+index 306d84d..062969b 100644
+--- a/generic/include/linux/libc-compat.h
++++ b/generic/include/linux/libc-compat.h
+@@ -62,6 +62,25 @@
+ #define __UAPI_DEF_TCPHDR 1
+ #endif
+ 
++#ifdef _TIME_H /* musl */
++#define __UAPI_DEF_TIMESPEC 0
++#define __UAPI_DEF_ITIMERSPEC 0
++#else
++#define __UAPI_DEF_TIMESPEC 1
++#define __UAPI_DEF_ITIMERSPEC 1
++#endif
++
++#ifdef _SYS_TIME_H /* musl */
++#define __UAPI_DEF_TIMEVAL 0
++#define __UAPI_DEF_ITIMERVAL 0
++#define __UAPI_DEF_TIMEZONE 0
++#else
++#define __UAPI_DEF_TIMEVAL 1
++#define __UAPI_DEF_ITIMERVAL 1
++#define __UAPI_DEF_TIMEZONE 1
++#endif
++
++
+ /* Coordinate with glibc netinet/in.h header. */
+ #if defined(_NETINET_IN_H)
+ 
+@@ -145,6 +164,13 @@
+ /* Definitions for xattr.h */
+ #define __UAPI_DEF_XATTR		1
+ 
++#define __UAPI_DEF_TIMESPEC 1
++#define __UAPI_DEF_ITIMERSPEC 1
++#define __UAPI_DEF_TIMEVAL 1
++#define __UAPI_DEF_ITIMERVAL 1
++#define __UAPI_DEF_TIMEZONE 1
++
++
+ #endif /* __GLIBC__ */
+ 
+ #endif /* _LIBC_COMPAT_H */
+diff --git a/generic/include/linux/time.h b/generic/include/linux/time.h
+index 3d7a29d..7c179d5 100644
+--- a/generic/include/linux/time.h
++++ b/generic/include/linux/time.h
+@@ -2,25 +2,32 @@
+ #define _LINUX_TIME_H
+ 
+ #include <linux/types.h>
++#include <linux/libc-compat.h>
+ 
+ 
+ #ifndef _STRUCT_TIMESPEC
+ #define _STRUCT_TIMESPEC
++#if __UAPI_DEF_TIMESPEC
+ struct timespec {
+ 	__kernel_time_t	tv_sec;			/* seconds */
+ 	long		tv_nsec;		/* nanoseconds */
+ };
+ #endif
++#endif
+ 
++#if __UAPI_DEF_TIMEVAL
+ struct timeval {
+ 	__kernel_time_t		tv_sec;		/* seconds */
+ 	__kernel_suseconds_t	tv_usec;	/* microseconds */
+ };
++#endif
+ 
++#if __UAPI_DEF_TIMEZONE
+ struct timezone {
+ 	int	tz_minuteswest;	/* minutes west of Greenwich */
+ 	int	tz_dsttime;	/* type of dst correction */
+ };
++#endif
+ 
+ 
+ /*
+@@ -31,15 +38,19 @@ struct timezone {
+ #define	ITIMER_VIRTUAL		1
+ #define	ITIMER_PROF		2
+ 
++#if __UAPI_DEF_ITIMERSPEC
+ struct itimerspec {
+ 	struct timespec it_interval;	/* timer period */
+ 	struct timespec it_value;	/* timer expiration */
+ };
++#endif
+ 
++#if __UAPI_DEF_ITIMERVAL
+ struct itimerval {
+ 	struct timeval it_interval;	/* timer interval */
+ 	struct timeval it_value;	/* current value */
+ };
++#endif
+ 
+ /*
+  * The IDs of the various system clocks (for POSIX.1b interval timers):
+@@ -64,6 +75,8 @@ struct itimerval {
+ /*
+  * The various flags for setting POSIX.1b interval timers:
+  */
++#ifndef TIMER_ABSTIME
+ #define TIMER_ABSTIME			0x01
++#endif
+ 
+ #endif /* _LINUX_TIME_H */
+-- 
+2.20.1
+
