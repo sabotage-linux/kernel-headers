@@ -19,7 +19,7 @@ mkdir -p generic/include
 for dir in asm-generic drm linux mtd rdma scsi sound video xen uapi
 do
   if test -d $1/usr/include/$dir ; then
-    cp -a $1/usr/include/$dir generic/include/
+    cp -RP $1/usr/include/$dir generic/include/
   else
     echo "warning: skipping $dir"
   fi
@@ -28,10 +28,10 @@ done
 uapi_base=
 test -d $1/usr/include/uapi && uapi_base=uapi/
 # these headers are missing from headers_install_all
-cp -a $1/include/${uapi_base}linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
+cp -RP $1/include/${uapi_base}linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
 
-find generic -name '..install.cmd' -delete
-find generic -name '.install' -delete
+find generic -name '..install.cmd' -exec rm {} +
+find generic -name '.install' -exec rm {} +
 git add generic/include/
 
 for arch in arm arm64 powerpc mips x86 microblaze openrisc sh
@@ -44,12 +44,12 @@ do
       ln -s ../../generic/include/$dir $arch/include/$dir
   done
   if test -d $1/usr/include/asm-$arch ; then
-    cp -a $1/usr/include/asm-$arch $arch/include/asm
+    cp -RP $1/usr/include/asm-$arch $arch/include/asm
   else
-    cp -a $1/usr/include/arch-$arch/asm $arch/include/
+    cp -RP $1/usr/include/arch-$arch/asm $arch/include/
   fi
-  find $arch -name '..install.cmd' -delete
-  find $arch -name '.install' -delete
+  find $arch -name '..install.cmd' -exec rm {} +
+  find $arch -name '.install' -exec rm {} +
   git add $arch/include
 done
 
