@@ -1,5 +1,5 @@
-#ifndef _UAPI__A_OUT_GNU_H__
-#define _UAPI__A_OUT_GNU_H__
+#ifndef __A_OUT_GNU_H__
+#define __A_OUT_GNU_H__
 
 #define __GNU_EXEC_MACROS__
 
@@ -130,16 +130,12 @@ enum machine_type {
 #endif
 
 #ifdef linux
-#ifndef __KERNEL__
 #include <unistd.h>
-#endif
 #if defined(__i386__) || defined(__mc68000__)
 #define SEGMENT_SIZE	1024
 #else
 #ifndef SEGMENT_SIZE
-#ifndef __KERNEL__
 #define SEGMENT_SIZE   getpagesize()
-#endif
 #endif
 #endif
 #endif
@@ -271,4 +267,4 @@ struct relocation_info
 #endif /* no N_RELOCATION_INFO_DECLARED.  */
 
 #endif /*__ASSEMBLY__ */
-#endif /* _UAPI__A_OUT_GNU_H__ */
+#endif /* __A_OUT_GNU_H__ */

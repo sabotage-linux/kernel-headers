@@ -12,8 +12,6 @@ if [ "$#" -ne 1 ] || ! [ -d "$1" ]; then
   exit 1
 fi
 
-cp generic/include/linux/module.h module.h.tmp
-
 git rm -rf generic/include/*
 mkdir -p generic/include
 for dir in asm-generic drm linux mtd rdma scsi sound video xen
@@ -28,14 +26,9 @@ done
 uapi_base=
 test -d $1/usr/include/uapi && uapi_base=uapi/
 # these headers are missing from headers_install_all
-cp -RP $1/include/${uapi_base}linux/a.out.h \
-  $1/include/${uapi_base}linux/kvm.h \
-  $1/include/${uapi_base}linux/kvm_para.h \
-  $1/include/${uapi_base}linux/module.h \
-  generic/include/linux/
-
-test -e generic/include/linux/module.h || \
-  mv module.h.tmp generic/include/linux/module.h
+(cd ../linux && scripts/headers_install.sh \
+  $OLDPWD/generic/include/linux include/uapi/linux \
+  a.out.h kvm.h kvm_para.h module.h)
 
 find generic -name '..install.cmd' -exec rm {} +
 find generic -name '.install' -exec rm {} +
