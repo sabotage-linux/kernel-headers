@@ -1,0 +1,41 @@
+From 67666c682781042c6e394ee560a0fb4f83511219 Mon Sep 17 00:00:00 2001
+From: Michael Forney <mforney@mforney.org>
+Date: Thu, 12 Dec 2019 01:44:41 -0800
+Subject: [PATCH] prevent TCP_NLA_* definition when netinet/tcp.h is included
+
+---
+ generic/include/linux/tcp.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/generic/include/linux/tcp.h b/generic/include/linux/tcp.h
+index fa6836e..41f27ce 100644
+--- a/generic/include/linux/tcp.h
++++ b/generic/include/linux/tcp.h
+@@ -234,7 +234,16 @@ struct tcp_info {
+ 	__u64	tcpi_sndbuf_limited; /* Time (usec) limited by send buffer */
+ };
+ 
++#ifndef __UAPI_DEF_TCPHDR
++#ifdef _NETINET_TCP_H /* musl */
++#define __UAPI_DEF_TCP_NLA_PAD 0
++#else
++#define __UAPI_DEF_TCP_NLA_PAD 1
++#endif
++#endif
++
+ /* netlink attributes types for SCM_TIMESTAMPING_OPT_STATS */
++#if __UAPI_DEF_TCP_NLA_PAD
+ enum {
+ 	TCP_NLA_PAD,
+ 	TCP_NLA_BUSY,		/* Time (usec) busy sending data */
+@@ -251,6 +260,7 @@ enum {
+ 	TCP_NLA_DELIVERY_RATE_APP_LMT, /* delivery rate application limited ? */
+ 
+ };
++#endif
+ 
+ /* for TCP_MD5SIG socket option */
+ #define TCP_MD5SIG_MAXKEYLEN	80
+-- 
+2.24.1
+

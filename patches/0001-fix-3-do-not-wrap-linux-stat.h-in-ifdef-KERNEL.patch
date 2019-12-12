@@ -1,4 +1,4 @@
-From cc8dc5890fecdfc14fbb2ff5da1361509bef51a3 Mon Sep 17 00:00:00 2001
+From f07ac27f290882abe22272e2aaf51aa045a63a08 Mon Sep 17 00:00:00 2001
 From: Justin Cormack <justin@specialbusservice.com>
 Date: Sun, 13 Oct 2013 20:56:04 +0100
 Subject: [PATCH] fix #3 do not wrap linux/stat.h in ifdef KERNEL
@@ -9,12 +9,12 @@ Subject: [PATCH] fix #3 do not wrap linux/stat.h in ifdef KERNEL
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/generic/include/linux/stat.h b/generic/include/linux/stat.h
-index b014ce4..895ae0a 100644
+index 6ead867..8b6831c 100644
 --- a/generic/include/linux/stat.h
 +++ b/generic/include/linux/stat.h
-@@ -2,7 +2,7 @@
- #define _LINUX_STAT_H
+@@ -4,7 +4,7 @@
  
+ #include <linux/types.h>
  
 -#if defined(__KERNEL__) || !defined(__GLIBC__) || (__GLIBC__ < 2)
 +#if defined(__KERNEL__) || !defined(S_ISLNK)
@@ -22,5 +22,5 @@ index b014ce4..895ae0a 100644
  #define S_IFMT  00170000
  #define S_IFSOCK 0140000
 -- 
-2.20.1
+2.24.1
 

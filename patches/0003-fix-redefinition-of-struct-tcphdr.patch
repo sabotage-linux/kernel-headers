@@ -1,4 +1,4 @@
-From 7f75b94bb53d8051bedfc1a0fcaaef7547f2d74b Mon Sep 17 00:00:00 2001
+From 1a1e164092a7d1febe8fb39a3faba236d51905d4 Mon Sep 17 00:00:00 2001
 From: rofl0r <retnyg@gmx.net>
 Date: Tue, 3 Jun 2014 13:54:36 +0200
 Subject: [PATCH] fix redefinition of struct tcphdr
@@ -8,10 +8,10 @@ Subject: [PATCH] fix redefinition of struct tcphdr
  1 file changed, 10 insertions(+)
 
 diff --git a/generic/include/linux/tcp.h b/generic/include/linux/tcp.h
-index 1e9b4a6..acb4e2c 100644
+index 9c99ba8..fa6836e 100644
 --- a/generic/include/linux/tcp.h
 +++ b/generic/include/linux/tcp.h
-@@ -21,6 +21,15 @@
+@@ -22,6 +22,15 @@
  #include <asm/byteorder.h>
  #include <linux/socket.h>
  
@@ -27,7 +27,7 @@ index 1e9b4a6..acb4e2c 100644
  struct tcphdr {
  	__be16	source;
  	__be16	dest;
-@@ -55,6 +64,7 @@ struct tcphdr {
+@@ -56,6 +65,7 @@ struct tcphdr {
  	__sum16	check;
  	__be16	urg_ptr;
  };

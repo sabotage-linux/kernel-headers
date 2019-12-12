@@ -1,4 +1,4 @@
-From 8c1be37786cdc112df311fe09bf26eec9a49d16b Mon Sep 17 00:00:00 2001
+From 95f59c7f25cd5006bef9b2d6921c6f7c1489515f Mon Sep 17 00:00:00 2001
 From: rofl0r <rofl0r@users.noreply.github.com>
 Date: Sat, 25 May 2019 21:34:42 +0100
 Subject: [PATCH] fix linux/time.h
@@ -8,10 +8,10 @@ Subject: [PATCH] fix linux/time.h
  1 file changed, 51 insertions(+)
 
 diff --git a/generic/include/linux/time.h b/generic/include/linux/time.h
-index 3d7a29d..1eb4c06 100644
+index 4d93d71..7a31c85 100644
 --- a/generic/include/linux/time.h
 +++ b/generic/include/linux/time.h
-@@ -3,24 +3,53 @@
+@@ -4,24 +4,53 @@
  
  #include <linux/types.h>
  
@@ -65,7 +65,7 @@ index 3d7a29d..1eb4c06 100644
  
  
  /*
-@@ -31,15 +60,35 @@ struct timezone {
+@@ -32,15 +61,35 @@ struct timezone {
  #define	ITIMER_VIRTUAL		1
  #define	ITIMER_PROF		2
  
@@ -101,7 +101,7 @@ index 3d7a29d..1eb4c06 100644
  
  /*
   * The IDs of the various system clocks (for POSIX.1b interval timers):
-@@ -64,6 +113,8 @@ struct itimerval {
+@@ -69,6 +118,8 @@ struct itimerval {
  /*
   * The various flags for setting POSIX.1b interval timers:
   */

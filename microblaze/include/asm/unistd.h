@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 /*
  * Copyright (C) 2007-2008 Michal Simek <monstr@monstr.eu>
  * Copyright (C) 2006 Atmark Techno, Inc.
@@ -407,5 +408,12 @@
 #define __NR_userfaultfd	389
 #define __NR_membarrier		390
 #define __NR_mlock2		391
+#define __NR_copy_file_range	392
+#define __NR_preadv2		393
+#define __NR_pwritev2		394
+#define __NR_pkey_mprotect	395
+#define __NR_pkey_alloc		396
+#define __NR_pkey_free		397
+#define __NR_statx		398
 
 #endif /* _ASM_MICROBLAZE_UNISTD_H */

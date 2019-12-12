@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 # ifdef __i386__
 #  include <asm/posix_types_32.h>
 # elif defined(__ILP32__)
