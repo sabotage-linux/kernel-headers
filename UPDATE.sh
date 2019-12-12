@@ -28,7 +28,11 @@ done
 uapi_base=
 test -d $1/usr/include/uapi && uapi_base=uapi/
 # these headers are missing from headers_install_all
-cp -RP $1/include/${uapi_base}linux/{a.out,kvm,kvm_para,module}.h generic/include/linux/
+cp -RP $1/include/${uapi_base}linux/a.out.h \
+  $1/include/${uapi_base}linux/kvm.h \
+  $1/include/${uapi_base}linux/kvm_para.h \
+  $1/include/${uapi_base}linux/module.h \
+  generic/include/linux/
 
 test -e generic/include/linux/module.h || \
   mv module.h.tmp generic/include/linux/module.h
