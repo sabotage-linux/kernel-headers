@@ -1,0 +1,115 @@
+From 8c1be37786cdc112df311fe09bf26eec9a49d16b Mon Sep 17 00:00:00 2001
+From: rofl0r <rofl0r@users.noreply.github.com>
+Date: Sat, 25 May 2019 21:34:42 +0100
+Subject: [PATCH] fix linux/time.h
+
+---
+ generic/include/linux/time.h | 51 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+
+diff --git a/generic/include/linux/time.h b/generic/include/linux/time.h
+index 3d7a29d..1eb4c06 100644
+--- a/generic/include/linux/time.h
++++ b/generic/include/linux/time.h
+@@ -3,24 +3,53 @@
+ 
+ #include <linux/types.h>
+ 
++#ifndef __UAPI_DEF_TIMESPEC
++#ifdef _TIME_H /* musl */
++#define __UAPI_DEF_TIMESPEC 0
++#else
++#define __UAPI_DEF_TIMESPEC 1
++#endif
++#endif
+ 
+ #ifndef _STRUCT_TIMESPEC
+ #define _STRUCT_TIMESPEC
++#if __UAPI_DEF_TIMESPEC
+ struct timespec {
+ 	__kernel_time_t	tv_sec;			/* seconds */
+ 	long		tv_nsec;		/* nanoseconds */
+ };
+ #endif
++#endif
++
++#ifndef __UAPI_DEF_TIMEVAL
++#ifdef _SYS_TIME_H /* musl */
++#define __UAPI_DEF_TIMEVAL 0
++#else
++#define __UAPI_DEF_TIMEVAL 1
++#endif
++#endif
+ 
++#if __UAPI_DEF_TIMEVAL
+ struct timeval {
+ 	__kernel_time_t		tv_sec;		/* seconds */
+ 	__kernel_suseconds_t	tv_usec;	/* microseconds */
+ };
++#endif
++
++#ifndef __UAPI_DEF_TIMEZONE
++#ifdef _SYS_TIME_H /* musl */
++#define __UAPI_DEF_TIMEZONE 0
++#else
++#define __UAPI_DEF_TIMEZONE 1
++#endif
++#endif
+ 
++#if __UAPI_DEF_TIMEZONE
+ struct timezone {
+ 	int	tz_minuteswest;	/* minutes west of Greenwich */
+ 	int	tz_dsttime;	/* type of dst correction */
+ };
++#endif
+ 
+ 
+ /*
+@@ -31,15 +60,35 @@ struct timezone {
+ #define	ITIMER_VIRTUAL		1
+ #define	ITIMER_PROF		2
+ 
++#ifndef __UAPI_DEF_ITIMERSPEC
++#ifdef _TIME_H /* musl */
++#define __UAPI_DEF_ITIMERSPEC 0
++#else
++#define __UAPI_DEF_ITIMERSPEC 1
++#endif
++#endif
++
++#if __UAPI_DEF_ITIMERSPEC
+ struct itimerspec {
+ 	struct timespec it_interval;	/* timer period */
+ 	struct timespec it_value;	/* timer expiration */
+ };
++#endif
+ 
++#ifndef __UAPI_DEF_ITIMERVAL
++#ifdef _SYS_TIME_H /* musl */
++#define __UAPI_DEF_ITIMERVAL 0
++#else
++#define __UAPI_DEF_ITIMERVAL 1
++#endif
++#endif
++
++#if __UAPI_DEF_ITIMERVAL
+ struct itimerval {
+ 	struct timeval it_interval;	/* timer interval */
+ 	struct timeval it_value;	/* current value */
+ };
++#endif
+ 
+ /*
+  * The IDs of the various system clocks (for POSIX.1b interval timers):
+@@ -64,6 +113,8 @@ struct itimerval {
+ /*
+  * The various flags for setting POSIX.1b interval timers:
+  */
++#ifndef TIMER_ABSTIME
+ #define TIMER_ABSTIME			0x01
++#endif
+ 
+ #endif /* _LINUX_TIME_H */
+-- 
+2.24.1
+

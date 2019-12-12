@@ -2,8 +2,14 @@
 #define _LINUX_TIME_H
 
 #include <linux/types.h>
-#include <linux/libc-compat.h>
 
+#ifndef __UAPI_DEF_TIMESPEC
+#ifdef _TIME_H /* musl */
+#define __UAPI_DEF_TIMESPEC 0
+#else
+#define __UAPI_DEF_TIMESPEC 1
+#endif
+#endif
 
 #ifndef _STRUCT_TIMESPEC
 #define _STRUCT_TIMESPEC
@@ -15,11 +21,27 @@ struct timespec {
 #endif
 #endif
 
+#ifndef __UAPI_DEF_TIMEVAL
+#ifdef _SYS_TIME_H /* musl */
+#define __UAPI_DEF_TIMEVAL 0
+#else
+#define __UAPI_DEF_TIMEVAL 1
+#endif
+#endif
+
 #if __UAPI_DEF_TIMEVAL
 struct timeval {
 	__kernel_time_t		tv_sec;		/* seconds */
 	__kernel_suseconds_t	tv_usec;	/* microseconds */
 };
+#endif
+
+#ifndef __UAPI_DEF_TIMEZONE
+#ifdef _SYS_TIME_H /* musl */
+#define __UAPI_DEF_TIMEZONE 0
+#else
+#define __UAPI_DEF_TIMEZONE 1
+#endif
 #endif
 
 #if __UAPI_DEF_TIMEZONE
@@ -38,11 +60,27 @@ struct timezone {
 #define	ITIMER_VIRTUAL		1
 #define	ITIMER_PROF		2
 
+#ifndef __UAPI_DEF_ITIMERSPEC
+#ifdef _TIME_H /* musl */
+#define __UAPI_DEF_ITIMERSPEC 0
+#else
+#define __UAPI_DEF_ITIMERSPEC 1
+#endif
+#endif
+
 #if __UAPI_DEF_ITIMERSPEC
 struct itimerspec {
 	struct timespec it_interval;	/* timer period */
 	struct timespec it_value;	/* timer expiration */
 };
+#endif
+
+#ifndef __UAPI_DEF_ITIMERVAL
+#ifdef _SYS_TIME_H /* musl */
+#define __UAPI_DEF_ITIMERVAL 0
+#else
+#define __UAPI_DEF_ITIMERVAL 1
+#endif
 #endif
 
 #if __UAPI_DEF_ITIMERVAL

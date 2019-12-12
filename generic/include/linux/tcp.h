@@ -18,9 +18,16 @@
 #define _LINUX_TCP_H
 
 #include <linux/types.h>
-#include <linux/libc-compat.h>
 #include <asm/byteorder.h>
 #include <linux/socket.h>
+
+#ifndef __UAPI_DEF_TCPHDR
+#ifdef _NETINET_TCP_H /* musl */
+#define __UAPI_DEF_TCPHDR 0
+#else
+#define __UAPI_DEF_TCPHDR 1
+#endif
+#endif
 
 #if __UAPI_DEF_TCPHDR
 struct tcphdr {
