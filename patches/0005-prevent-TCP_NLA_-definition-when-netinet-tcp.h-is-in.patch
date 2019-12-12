@@ -1,4 +1,4 @@
-From 67666c682781042c6e394ee560a0fb4f83511219 Mon Sep 17 00:00:00 2001
+From e45c1e2af5a75fffc6738b2a1c5e744d44aa47d6 Mon Sep 17 00:00:00 2001
 From: Michael Forney <mforney@mforney.org>
 Date: Thu, 12 Dec 2019 01:44:41 -0800
 Subject: [PATCH] prevent TCP_NLA_* definition when netinet/tcp.h is included
@@ -8,11 +8,11 @@ Subject: [PATCH] prevent TCP_NLA_* definition when netinet/tcp.h is included
  1 file changed, 10 insertions(+)
 
 diff --git a/generic/include/linux/tcp.h b/generic/include/linux/tcp.h
-index fa6836e..41f27ce 100644
+index 0e4bd0c..f3224da 100644
 --- a/generic/include/linux/tcp.h
 +++ b/generic/include/linux/tcp.h
-@@ -234,7 +234,16 @@ struct tcp_info {
- 	__u64	tcpi_sndbuf_limited; /* Time (usec) limited by send buffer */
+@@ -252,7 +252,16 @@ struct tcp_info {
+ 	__u32	tcpi_reord_seen;     /* reordering events seen */
  };
  
 +#ifndef __UAPI_DEF_TCPHDR
@@ -28,9 +28,9 @@ index fa6836e..41f27ce 100644
  enum {
  	TCP_NLA_PAD,
  	TCP_NLA_BUSY,		/* Time (usec) busy sending data */
-@@ -251,6 +260,7 @@ enum {
- 	TCP_NLA_DELIVERY_RATE_APP_LMT, /* delivery rate application limited ? */
- 
+@@ -277,6 +286,7 @@ enum {
+ 	TCP_NLA_DSACK_DUPS,	/* DSACK blocks received */
+ 	TCP_NLA_REORD_SEEN,	/* reordering events seen */
  };
 +#endif
  

@@ -24,6 +24,9 @@
 /* Output device. */
 #define NFC_DN_IF_OUT		0x0008
 
+/* kernel define is in netfilter_defs.h */
+#define NF_DN_NUMHOOKS		7
+
 /* DECnet Hooks */
 /* After promisc drops, checksum checks. */
 #define NF_DN_PRE_ROUTING	0
@@ -39,7 +42,6 @@
 #define NF_DN_HELLO		5
 /* Input Routing Packets */
 #define NF_DN_ROUTE		6
-#define NF_DN_NUMHOOKS		7
 
 enum nf_dn_hook_priorities {
 	NF_DN_PRI_FIRST = INT_MIN,
