@@ -10,9 +10,9 @@ some minor issues are fixed, plus libc-compat.h is patched
 to offer the same level of support for musl libc as the vanilla
 headers offer for glibc.
 
-we currently use the headers of kernel 4.4.2, which is what
-musl-cross-make is now using. It's also a long-term-support kernel.
-There is a previous 3.3.4 and a 3.12.6 branch.
+we currently use the headers of kernel 4.19.88, which is a recent
+long-term-support kernel. There are previous 4.4.2, 3.3.4, and 3.12.6
+branches.
 
 Installation:
 -------------
