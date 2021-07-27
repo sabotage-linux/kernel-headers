@@ -27,7 +27,7 @@ Download mirrors for release tarballs:
 
 - DE : http://ftp.barfooze.de/pub/sabotage/tarballs/
 - GR : http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/
-- UK : http://dl.2f30.org/mirrors/sabotage/tarballs/
+- UK : http://mirrors.2f30.org/sabotage/tarballs/
 
 
 Adding a new arch:
