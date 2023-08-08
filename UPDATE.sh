@@ -34,7 +34,7 @@ find generic -name '..install.cmd' -exec rm {} +
 find generic -name '.install' -exec rm {} +
 git add generic/include/
 
-for arch in arm arm64 powerpc mips x86 microblaze openrisc sh s390 m68k
+for arch in arm arm64 powerpc mips x86 microblaze openrisc sh s390 m68k riscv
 do
   test -e $arch/include && git rm -rf $arch/include/*
   mkdir -p $arch/include
