@@ -3,6 +3,7 @@
 #define _LINUX_SWAB_H
 
 #include <linux/types.h>
+#include <linux/stddef.h>
 
 #include <asm/swab.h>
 
