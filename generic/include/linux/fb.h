@@ -4,6 +4,7 @@
 
 #include <linux/types.h>
 #include <linux/i2c.h>
+#include <linux/vesa.h>
 
 /* Definitions of frame buffers						*/
 
@@ -180,7 +181,7 @@ struct fb_fix_screeninfo {
  *
  * For pseudocolor: offset and length should be the same for all color
  * components. Offset specifies the position of the least significant bit
- * of the pallette index in a pixel value. Length indicates the number
+ * of the palette index in a pixel value. Length indicates the number
  * of available palette entries (i.e. # of entries = 1 << length).
  */
 struct fb_bitfield {
@@ -203,6 +204,7 @@ struct fb_bitfield {
 #define FB_ACTIVATE_ALL	       64	/* change all VCs on this fb	*/
 #define FB_ACTIVATE_FORCE     128	/* force apply even when no change*/
 #define FB_ACTIVATE_INV_MODE  256       /* invalidate videomode */
+#define FB_ACTIVATE_KD_TEXT   512       /* for KDSET vt ioctl */
 
 #define FB_ACCELF_TEXT		1	/* (OBSOLETE) see fb_info.flags and vc_mode */
 
@@ -289,13 +291,6 @@ struct fb_con2fbmap {
 	__u32 console;
 	__u32 framebuffer;
 };
-
-/* VESA Blanking Levels */
-#define VESA_NO_BLANKING        0
-#define VESA_VSYNC_SUSPEND      1
-#define VESA_HSYNC_SUSPEND      2
-#define VESA_POWERDOWN          3
-
 
 enum {
 	/* screen: unblanked, hsync: on,  vsync: on */
@@ -391,11 +386,9 @@ struct fb_cursor {
 	struct fb_image	image;	/* Cursor image */
 };
 
-#ifdef CONFIG_FB_BACKLIGHT
 /* Settings for the generic backlight code */
 #define FB_BACKLIGHT_LEVELS	128
 #define FB_BACKLIGHT_MAX	0xFF
-#endif
 
 
 #endif /* _LINUX_FB_H */

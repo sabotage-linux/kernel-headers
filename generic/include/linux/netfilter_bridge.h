@@ -5,6 +5,8 @@
 /* bridge-specific defines for netfilter. 
  */
 
+#include <netinet/if_ether.h>	/* for __UAPI_DEF_ETHHDR if defined */
+
 #include <linux/in.h>
 #include <linux/netfilter.h>
 #include <linux/if_ether.h>

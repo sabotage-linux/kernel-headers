@@ -23,7 +23,7 @@
 #ifndef _LINUX_SYSCTL_H
 #define _LINUX_SYSCTL_H
 
-#include <linux/kernel.h>
+#include <linux/const.h>
 #include <linux/types.h>
 
 
@@ -153,6 +153,7 @@ enum
 	KERN_NMI_WATCHDOG=75, /* int: enable/disable nmi watchdog */
 	KERN_PANIC_ON_NMI=76, /* int: whether we will panic on an unrecovered */
 	KERN_PANIC_ON_WARN=77, /* int: call panic() in WARN() functions */
+	KERN_PANIC_PRINT=78, /* ulong: bitmask to print system info on panic */
 };
 
 
@@ -194,7 +195,7 @@ enum
 	VM_MIN_UNMAPPED=32,	/* Set min percent of unmapped pages */
 	VM_PANIC_ON_OOM=33,	/* panic at out-of-memory */
 	VM_VDSO_ENABLED=34,	/* map VDSO into new processes? */
-	VM_MIN_SLAB=35,		 /* Percent pages ignored by zone reclaim */
+	VM_MIN_SLAB=35,		 /* Percent pages ignored by node reclaim */
 };
 
 
@@ -481,6 +482,7 @@ enum
 	NET_IPV4_CONF_PROMOTE_SECONDARIES=20,
 	NET_IPV4_CONF_ARP_ACCEPT=21,
 	NET_IPV4_CONF_ARP_NOTIFY=22,
+	NET_IPV4_CONF_ARP_EVICT_NOCARRIER=23,
 };
 
 /* /proc/sys/net/ipv4/netfilter */
@@ -570,6 +572,7 @@ enum {
 	NET_IPV6_ACCEPT_SOURCE_ROUTE=25,
 	NET_IPV6_ACCEPT_RA_FROM_LOCAL=26,
 	NET_IPV6_ACCEPT_RA_RT_INFO_MIN_PLEN=27,
+	NET_IPV6_RA_DEFRTR_METRIC=28,
 	__NET_IPV6_MAX
 };
 
@@ -581,24 +584,25 @@ enum {
 
 /* /proc/sys/net/<protocol>/neigh/<dev> */
 enum {
-	NET_NEIGH_MCAST_SOLICIT=1,
-	NET_NEIGH_UCAST_SOLICIT=2,
-	NET_NEIGH_APP_SOLICIT=3,
-	NET_NEIGH_RETRANS_TIME=4,
-	NET_NEIGH_REACHABLE_TIME=5,
-	NET_NEIGH_DELAY_PROBE_TIME=6,
-	NET_NEIGH_GC_STALE_TIME=7,
-	NET_NEIGH_UNRES_QLEN=8,
-	NET_NEIGH_PROXY_QLEN=9,
-	NET_NEIGH_ANYCAST_DELAY=10,
-	NET_NEIGH_PROXY_DELAY=11,
-	NET_NEIGH_LOCKTIME=12,
-	NET_NEIGH_GC_INTERVAL=13,
-	NET_NEIGH_GC_THRESH1=14,
-	NET_NEIGH_GC_THRESH2=15,
-	NET_NEIGH_GC_THRESH3=16,
-	NET_NEIGH_RETRANS_TIME_MS=17,
-	NET_NEIGH_REACHABLE_TIME_MS=18,
+	NET_NEIGH_MCAST_SOLICIT = 1,
+	NET_NEIGH_UCAST_SOLICIT = 2,
+	NET_NEIGH_APP_SOLICIT = 3,
+	NET_NEIGH_RETRANS_TIME = 4,
+	NET_NEIGH_REACHABLE_TIME = 5,
+	NET_NEIGH_DELAY_PROBE_TIME = 6,
+	NET_NEIGH_GC_STALE_TIME = 7,
+	NET_NEIGH_UNRES_QLEN = 8,
+	NET_NEIGH_PROXY_QLEN = 9,
+	NET_NEIGH_ANYCAST_DELAY = 10,
+	NET_NEIGH_PROXY_DELAY = 11,
+	NET_NEIGH_LOCKTIME = 12,
+	NET_NEIGH_GC_INTERVAL = 13,
+	NET_NEIGH_GC_THRESH1 = 14,
+	NET_NEIGH_GC_THRESH2 = 15,
+	NET_NEIGH_GC_THRESH3 = 16,
+	NET_NEIGH_RETRANS_TIME_MS = 17,
+	NET_NEIGH_REACHABLE_TIME_MS = 18,
+	NET_NEIGH_INTERVAL_PROBE_TIME_MS = 19,
 };
 
 /* /proc/sys/net/dccp */

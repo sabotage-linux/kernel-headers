@@ -5,8 +5,6 @@
 #include <linux/types.h>
 #include <linux/pkt_cls.h>
 
-#define TCA_ACT_PEDIT 7
-
 enum {
 	TCA_PEDIT_UNSPEC,
 	TCA_PEDIT_TM,
@@ -64,7 +62,7 @@ struct tc_pedit_sel {
 	tc_gen;
 	unsigned char           nkeys;
 	unsigned char           flags;
-	struct tc_pedit_key     keys[0];
+	struct tc_pedit_key     keys[] __counted_by(nkeys);
 };
 
 #define tc_pedit tc_pedit_sel

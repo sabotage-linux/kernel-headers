@@ -5,7 +5,6 @@
 #include <linux/types.h>
 #include <linux/pkt_cls.h>
 
-#define TCA_ACT_MIRRED 8
 #define TCA_EGRESS_REDIR 1  /* packet redirect to EGRESS*/
 #define TCA_EGRESS_MIRROR 2 /* mirror packet to EGRESS */
 #define TCA_INGRESS_REDIR 3  /* packet redirect to INGRESS*/
@@ -22,6 +21,7 @@ enum {
 	TCA_MIRRED_TM,
 	TCA_MIRRED_PARMS,
 	TCA_MIRRED_PAD,
+	TCA_MIRRED_BLOCKID,
 	__TCA_MIRRED_MAX
 };
 #define TCA_MIRRED_MAX (__TCA_MIRRED_MAX - 1)

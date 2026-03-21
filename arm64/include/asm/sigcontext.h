@@ -62,6 +62,10 @@ struct sigcontext {
  * context. Such structures must be placed after the rt_sigframe on the stack
  * and be 16-byte aligned. The last structure must be a dummy one with the
  * magic and size set to 0.
+ *
+ * Note that the values allocated for use as magic should be chosen to
+ * be meaningful in ASCII to aid manual parsing, ZA doesn't follow this
+ * convention due to oversight but it should be observed for future additions.
  */
 struct _aarch64_ctx {
 	__u32 magic;
@@ -77,12 +81,28 @@ struct fpsimd_context {
 	__uint128_t vregs[32];
 };
 
+/*
+ * Note: similarly to all other integer fields, each V-register is stored in an
+ * endianness-dependent format, with the byte at offset i from the start of the
+ * in-memory representation of the register value containing
+ *
+ *    bits [(7 + 8 * i) : (8 * i)] of the register on little-endian hosts; or
+ *    bits [(127 - 8 * i) : (120 - 8 * i)] on big-endian hosts.
+ */
+
 /* ESR_EL1 context */
 #define ESR_MAGIC	0x45535201
 
 struct esr_context {
 	struct _aarch64_ctx head;
 	__u64 esr;
+};
+
+#define POE_MAGIC	0x504f4530
+
+struct poe_context {
+	struct _aarch64_ctx head;
+	__u64 por_el0;
 };
 
 /*
@@ -125,34 +145,70 @@ struct extra_context {
 struct sve_context {
 	struct _aarch64_ctx head;
 	__u16 vl;
+	__u16 flags;
+	__u16 __reserved[2];
+};
+
+#define SVE_SIG_FLAG_SM	0x1	/* Context describes streaming mode */
+
+/* TPIDR2_EL0 context */
+#define TPIDR2_MAGIC	0x54504902
+
+struct tpidr2_context {
+	struct _aarch64_ctx head;
+	__u64 tpidr2;
+};
+
+/* FPMR context */
+#define FPMR_MAGIC	0x46504d52
+
+struct fpmr_context {
+	struct _aarch64_ctx head;
+	__u64 fpmr;
+};
+
+#define ZA_MAGIC	0x54366345
+
+struct za_context {
+	struct _aarch64_ctx head;
+	__u16 vl;
+	__u16 __reserved[3];
+};
+
+#define ZT_MAGIC	0x5a544e01
+
+struct zt_context {
+	struct _aarch64_ctx head;
+	__u16 nregs;
 	__u16 __reserved[3];
 };
 
 #endif /* !__ASSEMBLY__ */
+
+#include <asm/sve_context.h>
 
 /*
  * The SVE architecture leaves space for future expansion of the
  * vector length beyond its initial architectural limit of 2048 bits
  * (16 quadwords).
  *
- * See linux/Documentation/arm64/sve.txt for a description of the VL/VQ
+ * See linux/Documentation/arch/arm64/sve.rst for a description of the VL/VQ
  * terminology.
  */
-#define SVE_VQ_BYTES		16	/* number of bytes per quadword */
+#define SVE_VQ_BYTES		__SVE_VQ_BYTES	/* bytes per quadword */
 
-#define SVE_VQ_MIN		1
-#define SVE_VQ_MAX		512
+#define SVE_VQ_MIN		__SVE_VQ_MIN
+#define SVE_VQ_MAX		__SVE_VQ_MAX
 
-#define SVE_VL_MIN		(SVE_VQ_MIN * SVE_VQ_BYTES)
-#define SVE_VL_MAX		(SVE_VQ_MAX * SVE_VQ_BYTES)
+#define SVE_VL_MIN		__SVE_VL_MIN
+#define SVE_VL_MAX		__SVE_VL_MAX
 
-#define SVE_NUM_ZREGS		32
-#define SVE_NUM_PREGS		16
+#define SVE_NUM_ZREGS		__SVE_NUM_ZREGS
+#define SVE_NUM_PREGS		__SVE_NUM_PREGS
 
-#define sve_vl_valid(vl) \
-	((vl) % SVE_VQ_BYTES == 0 && (vl) >= SVE_VL_MIN && (vl) <= SVE_VL_MAX)
-#define sve_vq_from_vl(vl)	((vl) / SVE_VQ_BYTES)
-#define sve_vl_from_vq(vq)	((vq) * SVE_VQ_BYTES)
+#define sve_vl_valid(vl)	__sve_vl_valid(vl)
+#define sve_vq_from_vl(vl)	__sve_vq_from_vl(vl)
+#define sve_vl_from_vq(vq)	__sve_vl_from_vq(vq)
 
 /*
  * If the SVE registers are currently live for the thread at signal delivery,
@@ -169,16 +225,23 @@ struct sve_context {
  * The same convention applies when returning from a signal: a caller
  * will need to remove or resize the sve_context block if it wants to
  * make the SVE registers live when they were previously non-live or
- * vice-versa.  This may require the the caller to allocate fresh
+ * vice-versa.  This may require the caller to allocate fresh
  * memory and/or move other context blocks in the signal frame.
  *
  * Changing the vector length during signal return is not permitted:
  * sve_context.vl must equal the thread's current vector length when
  * doing a sigreturn.
  *
+ * On systems with support for SME the SVE register state may reflect either
+ * streaming or non-streaming mode.  In streaming mode the streaming mode
+ * vector length will be used and the flag SVE_SIG_FLAG_SM will be set in
+ * the flags field. It is permitted to enter or leave streaming mode in
+ * a signal return, applications should take care to ensure that any difference
+ * in vector length between the two modes is handled, including any resizing
+ * and movement of context blocks.
  *
- * Note: for all these macros, the "vq" argument denotes the SVE
- * vector length in quadwords (i.e., units of 128 bits).
+ * Note: for all these macros, the "vq" argument denotes the vector length
+ * in quadwords (i.e., units of 128 bits).
  *
  * The correct way to obtain vq is to use sve_vq_from_vl(vl).  The
  * result is valid if and only if sve_vl_valid(vl) is true.  This is
@@ -203,36 +266,84 @@ struct sve_context {
  *	FFR	uint16_t[vq]			first-fault status register
  *
  * Additional data might be appended in the future.
+ *
+ * Unlike vregs[] in fpsimd_context, each SVE scalable register (Z-, P- or FFR)
+ * is encoded in memory in an endianness-invariant format, with the byte at
+ * offset i from the start of the in-memory representation containing bits
+ * [(7 + 8 * i) : (8 * i)] of the register value.
  */
 
-#define SVE_SIG_ZREG_SIZE(vq)	((__u32)(vq) * SVE_VQ_BYTES)
-#define SVE_SIG_PREG_SIZE(vq)	((__u32)(vq) * (SVE_VQ_BYTES / 8))
-#define SVE_SIG_FFR_SIZE(vq)	SVE_SIG_PREG_SIZE(vq)
+#define SVE_SIG_ZREG_SIZE(vq)	__SVE_ZREG_SIZE(vq)
+#define SVE_SIG_PREG_SIZE(vq)	__SVE_PREG_SIZE(vq)
+#define SVE_SIG_FFR_SIZE(vq)	__SVE_FFR_SIZE(vq)
 
 #define SVE_SIG_REGS_OFFSET					\
-	((sizeof(struct sve_context) + (SVE_VQ_BYTES - 1))	\
-		/ SVE_VQ_BYTES * SVE_VQ_BYTES)
+	((sizeof(struct sve_context) + (__SVE_VQ_BYTES - 1))	\
+		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
 
-#define SVE_SIG_ZREGS_OFFSET	SVE_SIG_REGS_OFFSET
+#define SVE_SIG_ZREGS_OFFSET \
+		(SVE_SIG_REGS_OFFSET + __SVE_ZREGS_OFFSET)
 #define SVE_SIG_ZREG_OFFSET(vq, n) \
-	(SVE_SIG_ZREGS_OFFSET + SVE_SIG_ZREG_SIZE(vq) * (n))
-#define SVE_SIG_ZREGS_SIZE(vq) \
-	(SVE_SIG_ZREG_OFFSET(vq, SVE_NUM_ZREGS) - SVE_SIG_ZREGS_OFFSET)
+		(SVE_SIG_REGS_OFFSET + __SVE_ZREG_OFFSET(vq, n))
+#define SVE_SIG_ZREGS_SIZE(vq) __SVE_ZREGS_SIZE(vq)
 
 #define SVE_SIG_PREGS_OFFSET(vq) \
-	(SVE_SIG_ZREGS_OFFSET + SVE_SIG_ZREGS_SIZE(vq))
+		(SVE_SIG_REGS_OFFSET + __SVE_PREGS_OFFSET(vq))
 #define SVE_SIG_PREG_OFFSET(vq, n) \
-	(SVE_SIG_PREGS_OFFSET(vq) + SVE_SIG_PREG_SIZE(vq) * (n))
-#define SVE_SIG_PREGS_SIZE(vq) \
-	(SVE_SIG_PREG_OFFSET(vq, SVE_NUM_PREGS) - SVE_SIG_PREGS_OFFSET(vq))
+		(SVE_SIG_REGS_OFFSET + __SVE_PREG_OFFSET(vq, n))
+#define SVE_SIG_PREGS_SIZE(vq) __SVE_PREGS_SIZE(vq)
 
 #define SVE_SIG_FFR_OFFSET(vq) \
-	(SVE_SIG_PREGS_OFFSET(vq) + SVE_SIG_PREGS_SIZE(vq))
+		(SVE_SIG_REGS_OFFSET + __SVE_FFR_OFFSET(vq))
 
 #define SVE_SIG_REGS_SIZE(vq) \
-	(SVE_SIG_FFR_OFFSET(vq) + SVE_SIG_FFR_SIZE(vq) - SVE_SIG_REGS_OFFSET)
+		(__SVE_FFR_OFFSET(vq) + __SVE_FFR_SIZE(vq))
 
-#define SVE_SIG_CONTEXT_SIZE(vq) (SVE_SIG_REGS_OFFSET + SVE_SIG_REGS_SIZE(vq))
+#define SVE_SIG_CONTEXT_SIZE(vq) \
+		(SVE_SIG_REGS_OFFSET + SVE_SIG_REGS_SIZE(vq))
 
+/*
+ * If the ZA register is enabled for the thread at signal delivery then,
+ * za_context.head.size >= ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
+ * and the register data may be accessed using the ZA_SIG_*() macros.
+ *
+ * If za_context.head.size < ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(za_context.vl))
+ * then ZA was not enabled and no register data was included in which case
+ * ZA register was not enabled for the thread and no register data
+ * the ZA_SIG_*() macros should not be used except for this check.
+ *
+ * The same convention applies when returning from a signal: a caller
+ * will need to remove or resize the za_context block if it wants to
+ * enable the ZA register when it was previously non-live or vice-versa.
+ * This may require the caller to allocate fresh memory and/or move other
+ * context blocks in the signal frame.
+ *
+ * Changing the vector length during signal return is not permitted:
+ * za_context.vl must equal the thread's current SME vector length when
+ * doing a sigreturn.
+ */
+
+#define ZA_SIG_REGS_OFFSET					\
+	((sizeof(struct za_context) + (__SVE_VQ_BYTES - 1))	\
+		/ __SVE_VQ_BYTES * __SVE_VQ_BYTES)
+
+#define ZA_SIG_REGS_SIZE(vq) (((vq) * __SVE_VQ_BYTES) * ((vq) * __SVE_VQ_BYTES))
+
+#define ZA_SIG_ZAV_OFFSET(vq, n) (ZA_SIG_REGS_OFFSET + \
+				  (SVE_SIG_ZREG_SIZE(vq) * (n)))
+
+#define ZA_SIG_CONTEXT_SIZE(vq) \
+		(ZA_SIG_REGS_OFFSET + ZA_SIG_REGS_SIZE(vq))
+
+#define ZT_SIG_REG_SIZE 512
+
+#define ZT_SIG_REG_BYTES (ZT_SIG_REG_SIZE / 8)
+
+#define ZT_SIG_REGS_OFFSET sizeof(struct zt_context)
+
+#define ZT_SIG_REGS_SIZE(n) (ZT_SIG_REG_BYTES * (n))
+
+#define ZT_SIG_CONTEXT_SIZE(n) \
+	(sizeof(struct zt_context) + ZT_SIG_REGS_SIZE(n))
 
 #endif /* __ASM_SIGCONTEXT_H */

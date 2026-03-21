@@ -3,55 +3,35 @@
 #define _LINUX_TIME_H
 
 #include <linux/types.h>
-
-#ifndef __UAPI_DEF_TIMESPEC
-#ifdef _TIME_H /* musl */
-#define __UAPI_DEF_TIMESPEC 0
-#else
-#define __UAPI_DEF_TIMESPEC 1
-#endif
-#endif
+#include <linux/time_types.h>
 
 #ifndef _STRUCT_TIMESPEC
 #define _STRUCT_TIMESPEC
-#if __UAPI_DEF_TIMESPEC
 struct timespec {
-	__kernel_time_t	tv_sec;			/* seconds */
-	long		tv_nsec;		/* nanoseconds */
+	__kernel_old_time_t	tv_sec;		/* seconds */
+	long			tv_nsec;	/* nanoseconds */
 };
 #endif
-#endif
 
-#ifndef __UAPI_DEF_TIMEVAL
-#ifdef _SYS_TIME_H /* musl */
-#define __UAPI_DEF_TIMEVAL 0
-#else
-#define __UAPI_DEF_TIMEVAL 1
-#endif
-#endif
-
-#if __UAPI_DEF_TIMEVAL
 struct timeval {
-	__kernel_time_t		tv_sec;		/* seconds */
+	__kernel_old_time_t	tv_sec;		/* seconds */
 	__kernel_suseconds_t	tv_usec;	/* microseconds */
 };
-#endif
 
-#ifndef __UAPI_DEF_TIMEZONE
-#ifdef _SYS_TIME_H /* musl */
-#define __UAPI_DEF_TIMEZONE 0
-#else
-#define __UAPI_DEF_TIMEZONE 1
-#endif
-#endif
+struct itimerspec {
+	struct timespec it_interval;/* timer period */
+	struct timespec it_value;	/* timer expiration */
+};
 
-#if __UAPI_DEF_TIMEZONE
+struct itimerval {
+	struct timeval it_interval;/* timer interval */
+	struct timeval it_value;	/* current value */
+};
+
 struct timezone {
 	int	tz_minuteswest;	/* minutes west of Greenwich */
 	int	tz_dsttime;	/* type of dst correction */
 };
-#endif
-
 
 /*
  * Names of the interval timers, and structure
@@ -60,62 +40,6 @@ struct timezone {
 #define	ITIMER_REAL		0
 #define	ITIMER_VIRTUAL		1
 #define	ITIMER_PROF		2
-
-#ifndef __UAPI_DEF_ITIMERSPEC
-#ifdef _TIME_H /* musl */
-#define __UAPI_DEF_ITIMERSPEC 0
-#else
-#define __UAPI_DEF_ITIMERSPEC 1
-#endif
-#endif
-
-#if __UAPI_DEF_ITIMERSPEC
-struct itimerspec {
-	struct timespec it_interval;	/* timer period */
-	struct timespec it_value;	/* timer expiration */
-};
-#endif
-
-#ifndef __UAPI_DEF_ITIMERVAL
-#ifdef _SYS_TIME_H /* musl */
-#define __UAPI_DEF_ITIMERVAL 0
-#else
-#define __UAPI_DEF_ITIMERVAL 1
-#endif
-#endif
-
-#if __UAPI_DEF_ITIMERVAL
-struct itimerval {
-	struct timeval it_interval;	/* timer interval */
-	struct timeval it_value;	/* current value */
-};
-#endif
-
-#ifndef __kernel_timespec
-struct __kernel_timespec {
-	__kernel_time64_t       tv_sec;                 /* seconds */
-	long long               tv_nsec;                /* nanoseconds */
-};
-#endif
-
-#ifndef __kernel_itimerspec
-struct __kernel_itimerspec {
-	struct __kernel_timespec it_interval;    /* timer period */
-	struct __kernel_timespec it_value;       /* timer expiration */
-};
-#endif
-
-/*
- * legacy timeval structure, only embedded in structures that
- * traditionally used 'timeval' to pass time intervals (not absolute
- * times). Do not add new users. If user space fails to compile
- * here, this is probably because it is not y2038 safe and needs to
- * be changed to use another interface.
- */
-struct __kernel_old_timeval {
-	__kernel_long_t tv_sec;
-	__kernel_long_t tv_usec;
-};
 
 /*
  * The IDs of the various system clocks (for POSIX.1b interval timers):
@@ -144,8 +68,6 @@ struct __kernel_old_timeval {
 /*
  * The various flags for setting POSIX.1b interval timers:
  */
-#ifndef TIMER_ABSTIME
 #define TIMER_ABSTIME			0x01
-#endif
 
 #endif /* _LINUX_TIME_H */
